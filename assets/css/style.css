@@ -1,0 +1,9 @@
+@font-face {
+    font-family: 'TTNormsMedium';
+    src: url('../fonts/TTNormsMedium.eot');
+    src: url('../fonts/TTNormsMedium.eot') format('embedded-opentype'),
+        url('../fonts/TTNormsMedium.woff2') format('woff2'),
+        url('../fonts/TTNormsMedium.woff') format('woff'),
+        url('../fonts/TTNormsMedium.ttf') format('truetype'),
+        url('../fonts/TTNormsMedium.svg#TTNormsMedium') format('svg');
+}
