@@ -330,6 +330,7 @@ app.get('/teams', (req, res) => {
 
         result.rows.forEach(row => {
             const yourDateTime = new Date(row.logdate);
+            yourDateTime.setHours(yourDateTime.getHours() - 2);
 
             // Текущая дата-время
             const currentDateTime = new Date();
