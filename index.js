@@ -341,7 +341,7 @@ app.get('/teams', (req, res) => {
             const differenceInMilliseconds = yourDateTime - currentDateTime;
 
             // Перевод разницы в минуты
-            const diffInMinutes = differenceInMilliseconds / (1000 * 60);
+            const diffInMinutes = Math.abs(Math.floor(differenceInMilliseconds / (1000 * 60)));
 
             console.log("Разница в минутах:", diffInMinutes);
 
