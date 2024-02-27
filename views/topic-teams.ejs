@@ -307,25 +307,35 @@
                 <div class="col-2">
                     <div class="d-flex justify-content-end">
                         <div class="back" onclick="history.back()"><i class="fa-solid fa-arrow-left-long"></i></div>
-                    </div> 
+                    </div>
                 </div>
                 <div class="col-8">
-                    <% topics.forEach(topic => { %>
+                    <% topics.forEach(topic=> { %>
                         <div class="card">
                             <div class="list">
-                                <div class="title"><%= topic.title %></div>
+                                <div class="title">
+                                    <%= topic.title %>
+                                </div>
                                 <div class="line"></div>
                                 <div class="description"><%- topic.description.replace(/\n/g, '<br>' ) %> %></div>
                                 <div class="line"></div>
                                 <div>
                                     <div class="d-inline-flex title-contact">Контакты:</div>
-                                    <% JSON.parse(topic.contact).forEach(item => { %>
-                                        <div class="d-inline-flex contact"><%= item %></div>
-                                    <% }); %>
+                                    <% if (Array.isArray(JSON.parse(topic.contact))) { %>
+                                        <% JSON.parse(topic.contact).forEach(item=> { %>
+                                            <div class="d-inline-flex contact">
+                                                <%= item %>
+                                            </div>
+                                            <% }); %>
+                                                <% } else { %>
+                                                    <div class="d-inline-flex contact">
+                                                        <%= JSON.parse(topic.contact) %>
+                                                    </div>
+                                                    <% } %>
                                 </div>
                             </div>
-                        </div> 
-                    <% }); %>
+                        </div>
+                        <% }); %>
                 </div>
                 <div class="col-2"></div>
             </div>

@@ -365,10 +365,7 @@ app.get('/teams', (req, res) => {
 
             const differenceInMilliseconds = yourDateTime - currentDateTime;
 
-            // Перевод разницы в минуты
             const diffInMinutes = Math.abs(Math.floor(differenceInMilliseconds / (1000 * 60)));
-
-            console.log("Разница в минутах:", diffInMinutes);
 
             if (diffInMinutes < 60) {
                 row.lastOnline = `${diffInMinutes} ${pluralize(diffInMinutes, 'минуту', 'минуты', 'минут')} назад`;
