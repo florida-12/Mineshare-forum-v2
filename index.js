@@ -102,8 +102,7 @@ passport.use(new LocalStrategy({
     passwordField: 'password',
 }, async (email, password, done) => {
     try {
-        const userQuery = 'SELECT * FROM users WHERE email = $1';
-        const userResult = await pool.query(userQuery, [email]);
+        const userResult = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
 
         if (userResult.rows.length > 0) {
             const user = userResult.rows[0];
@@ -115,6 +114,7 @@ passport.use(new LocalStrategy({
             const match = await bcrypt.compare(password, user.password);
 
             if (match) {
+                const logdate = await pool.query('UPDATE users SET logdate = $1 WHERE email = $2', [(moment.tz('Europe/Moscow').format('YYYY-MM-DD HH:mm:ss')), email]);
                 return done(null, user);
             } else {
                 return done(null, false, { message: 'Incorrect password.' });
@@ -226,7 +226,7 @@ app.get('/logout', (req, res) => {
 
 function isAuthenticated(req, res, next) {
     if (req.isAuthenticated()) return next();
-    res.redirect('/?login=login');
+    res.redirect('/login');
 }
 
 app.get('/account', isAuthenticated, (req, res) => {
@@ -316,15 +316,43 @@ app.get('/login', (req, res) => {
 app.get('/teams', (req, res) => {
     if (!req.path.endsWith('/') && req.path !== '/') return res.redirect(301, req.path + '/');
 
-    pool.query(`SELECT forum_teams.*, users.username, users.skin FROM forum_teams JOIN users ON forum_teams.owner = users.id WHERE forum_teams.status = false AND forum_teams.ban = false ORDER BY update DESC;`, (err, result) => {
+    pool.query(`SELECT forum_teams.*, users.username, users.skin, users.logdate FROM forum_teams JOIN users ON forum_teams.owner = users.id WHERE forum_teams.status = false AND forum_teams.ban = false ORDER BY update DESC;`, (err, result) => {
         if (err) {
             console.error(err);
             return res.status(500).send('Internal Server Error');
         }
 
+        result.rows.forEach(row => {
+            const currentTime = moment.tz(moment(), 'Europe/Moscow');
+            const lastOnlineTime = moment.tz(row.logdate, 'Europe/Moscow');
+            
+            // Разница во времени в минутах
+            const diffInMinutes = Math.abs(currentTime.diff(lastOnlineTime, 'minutes'));
+            console.log(lastOnlineTime);
+            console.log(diffInMinutes);
+
+            if (diffInMinutes < 60) {
+                row.lastOnline = `${diffInMinutes} ${pluralize(diffInMinutes, 'минуту', 'минуты', 'минут')} назад`;
+            } else {
+                const diffInHours = Math.floor(diffInMinutes / 60);
+                row.lastOnline = `${diffInHours} ${pluralize(diffInHours, 'час', 'часа', 'часов')} назад`;
+            }
+        });
+
         res.render('teams', { user: req.user, topics: result.rows, footer: footer_html });
     });
 });
+
+// Функция для склонения слов по числам
+function pluralize(number, one, few, many) {
+    if (number === 1) {
+        return one;
+    } else if (number >= 2 && number <= 4) {
+        return few;
+    } else {
+        return many;
+    }
+}
 
 app.get('/teams/topic/:id', (req, res) => {
     if (!req.path.endsWith('/') && req.path !== '/') return res.redirect(301, req.path + '/');
