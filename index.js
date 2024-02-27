@@ -324,11 +324,11 @@ app.get('/teams', (req, res) => {
 
         result.rows.forEach(row => {
             const currentTime = moment.tz(moment(), 'Europe/Moscow');
-            const lastOnlineTime = moment.tz(row.logdate, 'Europe/Moscow');
-            
+            console.log(currentTime);
+            const lastOnlineTime = moment.tz(row.logdate, 'Europe/Moscow').subtract(1, 'hours');
+
             // Разница во времени в минутах
             const diffInMinutes = Math.abs(currentTime.diff(lastOnlineTime, 'minutes'));
-            console.log(lastOnlineTime);
             console.log(diffInMinutes);
 
             if (diffInMinutes < 60) {
