@@ -97,6 +97,10 @@ async function generatePassword() {
     return hashedPassword;
 }
 
+async function updateOnlineStatus(email) {
+    const logdate = await pool.query('UPDATE users SET logdate = CURRENT_TIMESTAMP WHERE email = $1', [email]);
+}
+
 passport.use(new LocalStrategy({
     usernameField: 'email',
     passwordField: 'password',
@@ -334,6 +338,8 @@ app.get('/', (req, res) => {
             }
         });
 
+        if (req.user) updateOnlineStatus(req.user.email);
+        
         res.render('home', { user: req.user, moderators: result.rows, footer: footer_html });
     });
 });
