@@ -322,14 +322,27 @@ app.get('/teams', (req, res) => {
             return res.status(500).send('Internal Server Error');
         }
 
-        result.rows.forEach(row => {
-            const currentTime = moment.tz(moment(), 'Europe/Moscow').add(1, 'hours');
-            console.log(currentTime);
-            const lastOnlineTime = moment.tz(row.logdate, 'Europe/Moscow');
+        // Получаем текущее время сервера
+        const currentTime = moment();
 
-            // Разница во времени в минутах
-            const diffInMinutes = Math.abs(currentTime.diff(lastOnlineTime, 'minutes'));
-            console.log(diffInMinutes);
+        // Получаем смещение временной зоны сервера
+        const serverTimezoneOffset = currentTime.utcOffset();
+
+        result.rows.forEach(row => {
+            const yourDateTime = new Date(row.logdate);
+
+            // Текущая дата-время
+            const currentDateTime = new Date();
+            console.log(yourDateTime)
+            console.log(currentDateTime)
+
+            // Разница между вашей датой-временем и текущей датой-временем в миллисекундах
+            const differenceInMilliseconds = yourDateTime - currentDateTime;
+
+            // Перевод разницы в минуты
+            const diffInMinutes = differenceInMilliseconds / (1000 * 60);
+
+            console.log("Разница в минутах:", diffInMinutes);
 
             if (diffInMinutes < 60) {
                 row.lastOnline = `${diffInMinutes} ${pluralize(diffInMinutes, 'минуту', 'минуты', 'минут')} назад`;
