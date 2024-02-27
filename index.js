@@ -219,7 +219,7 @@ app.post('/login', passport.authenticate('local', {
 app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 
 app.get('/auth/google/callback',
-    passport.authenticate('google', { successRedirect: '/account', failureRedirect: '/' }));
+    passport.authenticate('google', { successRedirect: '/', failureRedirect: '/' }));
 
 app.get('/logout', (req, res) => {
     req.logout((err) => {
