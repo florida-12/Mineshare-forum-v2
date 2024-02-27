@@ -298,12 +298,41 @@ app.get('/account/confirm/:token', async (req, res) => {
     }
 });
 
+function pluralize(number, one, few, many) {
+    if (number === 1) {
+        return one;
+    } else if (number >= 2 && number <= 4) {
+        return few;
+    } else {
+        return many;
+    }
+}
+
 app.get('/', (req, res) => {
-    pool.query(`SELECT username, skin FROM users WHERE admin = true;`, (err, result) => {
+    pool.query(`SELECT username, skin, logdate FROM users WHERE admin = true;`, (err, result) => {
         if (err) {
             console.error(err);
             return res.status(500).send('Internal Server Error');
         }
+
+        result.rows.forEach(row => {
+            const yourDateTime = new Date(row.logdate);
+            yourDateTime.setHours(yourDateTime.getHours() - 2);
+
+            const currentDateTime = new Date();
+
+            const differenceInMilliseconds = yourDateTime - currentDateTime;
+
+            const diffInMinutes = Math.abs(Math.floor(differenceInMilliseconds / (1000 * 60)));
+            row.online_minutes = diffInMinutes;
+
+            if (diffInMinutes < 60) {
+                row.last_online = `${diffInMinutes} ${pluralize(diffInMinutes, 'минуту', 'минуты', 'минут')} назад`;
+            } else {
+                const diffInHours = Math.floor(diffInMinutes / 60);
+                row.last_online = `${diffInHours} ${pluralize(diffInHours, 'час', 'часа', 'часов')} назад`;
+            }
+        });
 
         res.render('home', { user: req.user, moderators: result.rows, footer: footer_html });
     });
@@ -322,22 +351,12 @@ app.get('/teams', (req, res) => {
             return res.status(500).send('Internal Server Error');
         }
 
-        // Получаем текущее время сервера
-        const currentTime = moment();
-
-        // Получаем смещение временной зоны сервера
-        const serverTimezoneOffset = currentTime.utcOffset();
-
         result.rows.forEach(row => {
             const yourDateTime = new Date(row.logdate);
             yourDateTime.setHours(yourDateTime.getHours() - 2);
 
-            // Текущая дата-время
             const currentDateTime = new Date();
-            console.log(yourDateTime)
-            console.log(currentDateTime)
 
-            // Разница между вашей датой-временем и текущей датой-временем в миллисекундах
             const differenceInMilliseconds = yourDateTime - currentDateTime;
 
             // Перевод разницы в минуты
@@ -356,17 +375,6 @@ app.get('/teams', (req, res) => {
         res.render('teams', { user: req.user, topics: result.rows, footer: footer_html });
     });
 });
-
-// Функция для склонения слов по числам
-function pluralize(number, one, few, many) {
-    if (number === 1) {
-        return one;
-    } else if (number >= 2 && number <= 4) {
-        return few;
-    } else {
-        return many;
-    }
-}
 
 app.get('/teams/topic/:id', (req, res) => {
     if (!req.path.endsWith('/') && req.path !== '/') return res.redirect(301, req.path + '/');

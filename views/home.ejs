@@ -461,7 +461,16 @@
             font-family: 'TT Norms Pro', sans-serif;
             font-size: 10px;
             font-weight: 500;
+        }
 
+        .moderation .user .status-offline {
+            position: absolute;
+            top: -2px;
+            right: 0;
+            color: #b9b9b9;
+            font-family: 'TT Norms Pro', sans-serif;
+            font-size: 10px;
+            font-weight: 500;
         }
 
         .moderation .line {
@@ -703,7 +712,13 @@
                                         </div>
                                         <div class="major moder">[модератор]</div>
                                     </div>
-                                    <div class="status-online">● онлайн</div>
+                                    <% if (user.online_minutes <=5) { %>
+                                        <div class="status-online">● онлайн</div>
+                                        <% } else { %>
+                                            <div class="status-offline">
+                                                <%= user.last_online %>
+                                            </div>
+                                            <% } %>
                                 </div>
                                 <% if (index !=moderators.length - 1) { %>
                                     <div class="line"></div>
