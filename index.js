@@ -114,7 +114,7 @@ passport.use(new LocalStrategy({
             const match = await bcrypt.compare(password, user.password);
 
             if (match) {
-                const logdate = await pool.query('UPDATE users SET logdate = $1 WHERE email = $2', [(moment.tz('Europe/Moscow').format('YYYY-MM-DD HH:mm:ss')), email]);
+                const logdate = await pool.query('UPDATE users SET logdate = CURRENT_TIMESTAMP WHERE email = $1', [email]);
                 return done(null, user);
             } else {
                 return done(null, false, { message: 'Incorrect password.' });
@@ -325,7 +325,7 @@ app.get('/teams', (req, res) => {
         result.rows.forEach(row => {
             const currentTime = moment.tz(moment(), 'Europe/Moscow');
             console.log(currentTime);
-            const lastOnlineTime = moment.tz(row.logdate, 'Europe/Moscow').subtract(1, 'hours');
+            const lastOnlineTime = moment.tz(row.logdate, 'Europe/Moscow');
 
             // Разница во времени в минутах
             const diffInMinutes = Math.abs(currentTime.diff(lastOnlineTime, 'minutes'));
