@@ -323,7 +323,7 @@ app.get('/teams', (req, res) => {
         }
 
         result.rows.forEach(row => {
-            const currentTime = moment.tz(moment(), 'Europe/Moscow');
+            const currentTime = moment.tz(moment(), 'Europe/Moscow').add(1, 'hours');
             console.log(currentTime);
             const lastOnlineTime = moment.tz(row.logdate, 'Europe/Moscow');
 
