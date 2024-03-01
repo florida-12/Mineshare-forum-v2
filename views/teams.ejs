@@ -318,6 +318,61 @@
             margin-left: 3px;
         }
 
+        .topic .date-status {
+            height: 52.5px;
+            overflow: hidden;
+            vertical-align: top;
+            float: right;
+            margin-right: 7px;
+        }
+
+        .topic .date-status .date {
+            height: 22px;
+            background: #fff;
+            border: 1.5px solid #ededed;
+            border-radius: 4px;
+            color: #9c9c9c;
+            font-family: 'TT Norms Pro', sans-serif;
+            font-size: 13px;
+            font-weight: 500;
+            text-align: right;
+            padding-top: 2px;
+            padding-left: 10px;
+            padding-right: 10px;
+            padding-bottom: 2px;
+            margin-bottom: 5px;
+        }
+
+        .topic .date-status .date i {
+            font-size: 10px;
+            vertical-align: top;
+            margin-top: 3.5px;
+            margin-left: 5px;
+        }
+
+        .topic .date-status .status {
+            height: 22px;
+            background: #fff;
+            border: 1.5px solid #ededed;
+            border-radius: 4px;
+            color: #fff;
+            font-family: 'TT Norms Pro', sans-serif;
+            font-size: 13px;
+            text-align: center;
+            font-weight: 500;
+            padding-top: 2px;
+            padding-left: 10px;
+            padding-right: 10px;
+            padding-bottom: 2px;
+        }
+
+        .topic .date-status .status i {
+            font-size: 10px;
+            vertical-align: top;
+            margin-top: 3px;
+            margin-left: 5px;
+        }
+
         .topic .info {
             width: 50px;
             height: 50px;
@@ -340,7 +395,7 @@
             left: 50%;
             transform: translate(-50%, -50%);
             color: #11B2FF;
-            font-size: 26px;
+            font-size: 20px;
         }
 
         .topic .user {
@@ -498,7 +553,11 @@
                                     </div>
                                 </div>
 
-                                <div class="d-inline-flex info"><i class="fa-solid fa-face-smile"></i></div>
+                                <% if(topic.status == false) { %>
+                                <div class="d-inline-flex info"><i class="fa-solid fa-lock-open"></i></div>
+                                <% } else { %>
+                                    <div class="d-inline-flex info"><i class="fa-solid fa-lock"></i></div>
+                                    <% } %>
 
                                 <div class="user">
                                     <img
@@ -514,6 +573,11 @@
                                 <div class="d-inline-flex flex-column counter">
                                     <div class="records">∞<i class="fa-solid fa-message-lines"></i></div>
                                     <div class="views">∞<i class="fa-solid fa-eye"></i></div>
+                                </div>
+
+                                <div class="d-inline-flex flex-column date-status">
+                                    <div class="date"><%= topic.update %><i class="fa-solid fa-clock"></i></div>
+                                    <div class="status"><i class="fa-solid fa-lock-open"></i></div>
                                 </div>
                             </div>
 

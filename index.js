@@ -313,7 +313,7 @@ function pluralize(number, one, few, many) {
 }
 
 app.get('/', (req, res) => {
-    pool.query(`SELECT username, skin, logdate FROM users WHERE admin = true;`, (err, result) => {
+    pool.query(`SELECT username, skin, logdate FROM users WHERE admin = true;`, async (err, result) => {
         if (err) {
             console.error(err);
             return res.status(500).send('Internal Server Error');
@@ -338,9 +338,11 @@ app.get('/', (req, res) => {
             }
         });
 
+        const teams = await pool.query('SELECT id FROM forum_teams WHERE status = false AND ban = false;');
+
         if (req.user) updateOnlineStatus(req.user.email);
         
-        res.render('home', { user: req.user, moderators: result.rows, footer: footer_html });
+        res.render('home', { user: req.user, moderators: result.rows, teams: teams.rows.length, footer: footer_html });
     });
 });
 
@@ -358,6 +360,8 @@ app.get('/teams', (req, res) => {
         }
 
         result.rows.forEach(row => {
+            row.update = moment.tz(row.update, 'Europe/Moscow').locale('ru').format('D MMM HH:mm');
+
             const yourDateTime = new Date(row.logdate);
             yourDateTime.setHours(yourDateTime.getHours() - 2);
 
@@ -409,6 +413,10 @@ app.post('/teams/add', isAuthenticated, (req, res) => {
 
         res.redirect('/teams');
     });
+});
+
+app.get('/manuals/add', isAuthenticated, (req, res) => {
+    res.render('create-topic-manuals', { footer: footer_html });
 });
 
 async function sendConfirmationEmail(email, confirmationLink) {
