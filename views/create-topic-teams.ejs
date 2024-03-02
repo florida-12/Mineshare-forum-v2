@@ -558,7 +558,7 @@
                             <div id="test_title"></div>
                         </div>
                         <div class="form-version">
-                            <div id="test_version">1.20.X</div>
+                            <div id="test_version"></div>
                         </div>
                     </div>
                     <div class="form-description">
@@ -713,7 +713,7 @@
                 $('#title').parent().addClass('error');
             } if ($('#version').val() == "") {
                 $('#version').parent().addClass('error');
-            } else {
+            } if ($('#title').val() != "" && $('#version').val() != "") {
                 $('#title').parent().removeClass('error');
                 $('#version').parent().removeClass('error');
                 changePage('description');
