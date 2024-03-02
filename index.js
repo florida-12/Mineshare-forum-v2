@@ -341,7 +341,7 @@ app.get('/', (req, res) => {
         const teams = await pool.query('SELECT id FROM forum_teams WHERE status = false AND ban = false;');
 
         if (req.user) updateOnlineStatus(req.user.email);
-        
+
         res.render('home', { user: req.user, moderators: result.rows, teams: teams.rows.length, footer: footer_html });
     });
 });
@@ -379,6 +379,8 @@ app.get('/teams', (req, res) => {
             }
         });
 
+        if (req.user) updateOnlineStatus(req.user.email);
+
         res.render('teams', { user: req.user, topics: result.rows, footer: footer_html });
     });
 });
@@ -392,6 +394,11 @@ app.get('/teams/topic/:id', (req, res) => {
             return res.status(500).send('Internal Server Error');
         }
 
+        result.rows.forEach(row => {
+            const pattern = /\['(.*?)'\]/;
+            row.description = row.description.replace(pattern, '<img class="image" src="$1">');
+        });
+
         res.render('topic-teams', { user: req.user, topics: result.rows, footer: footer_html });
     });
 });
@@ -403,7 +410,16 @@ app.get('/teams/add', isAuthenticated, (req, res) => {
 app.post('/teams/add', isAuthenticated, (req, res) => {
     let { type, title, version, description, contacts } = req.body;
     const identifier = uuidv4();
-    const contact = JSON.stringify(contacts);
+
+    const filteredContacts = contacts.filter(contact => {
+        for (const key in contact) {
+            if (contact.hasOwnProperty(key) && contact[key] !== null && contact[key] !== '') {
+                return true;
+            }
+        }
+        return false;
+    });
+    const contact = JSON.stringify(filteredContacts);
 
     pool.query(`INSERT INTO forum_teams (identifier, type, title, description, contact, version, owner) VALUES ($1, $2, $3, $4, $5, $6, $7);`, [identifier, type, title, description, contact, version, req.user.id], (err, result) => {
         if (err) {
@@ -412,6 +428,41 @@ app.post('/teams/add', isAuthenticated, (req, res) => {
         }
 
         res.redirect('/teams');
+    });
+});
+
+app.get('/manuals', (req, res) => {
+    if (!req.path.endsWith('/') && req.path !== '/') return res.redirect(301, req.path + '/');
+
+    pool.query(`SELECT forum_manuals.*, users.username, users.skin, users.logdate FROM forum_manuals JOIN users ON forum_manuals.owner = users.id WHERE forum_manuals.status = false AND forum_manuals.ban = false ORDER BY update DESC;`, (err, result) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).send('Internal Server Error');
+        }
+
+        result.rows.forEach(row => {
+            row.update = moment.tz(row.update, 'Europe/Moscow').locale('ru').format('D MMM HH:mm');
+
+            const yourDateTime = new Date(row.logdate);
+            yourDateTime.setHours(yourDateTime.getHours() - 2);
+
+            const currentDateTime = new Date();
+
+            const differenceInMilliseconds = yourDateTime - currentDateTime;
+
+            const diffInMinutes = Math.abs(Math.floor(differenceInMilliseconds / (1000 * 60)));
+
+            if (diffInMinutes < 60) {
+                row.lastOnline = `${diffInMinutes} ${pluralize(diffInMinutes, 'минуту', 'минуты', 'минут')} назад`;
+            } else {
+                const diffInHours = Math.floor(diffInMinutes / 60);
+                row.lastOnline = `${diffInHours} ${pluralize(diffInHours, 'час', 'часа', 'часов')} назад`;
+            }
+        });
+
+        if (req.user) updateOnlineStatus(req.user.email);
+
+        res.render('manuals', { user: req.user, topics: result.rows, footer: footer_html });
     });
 });
 

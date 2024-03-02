@@ -22,6 +22,8 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap"
         rel="stylesheet">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </head>
 
 <body>
@@ -332,7 +334,7 @@
             border: 1.5px solid #ededed;
             border-radius: 4px;
             color: #9c9c9c;
-            font-family: 'TT Norms Pro', sans-serif;
+            font-family: "Nunito Sans", sans-serif;
             font-size: 13px;
             font-weight: 500;
             text-align: right;
@@ -389,6 +391,10 @@
             border: 1.5px solid #11B2FF;
         }
 
+        .topic .info:hover .tip {
+            display: block;
+        }
+
         .topic .info i {
             position: absolute;
             top: 50%;
@@ -396,6 +402,35 @@
             transform: translate(-50%, -50%);
             color: #11B2FF;
             font-size: 20px;
+        }
+
+        .topic .info .tip {
+            position: absolute;
+            top: 50%;
+            left: calc(100% + 15px);
+            transform: translateY(-50%);
+            background: #11B2FF;
+            border-radius: 4px;
+            color: #fff;
+            font-family: 'TT Norms Pro', sans-serif;
+            font-size: 12px;
+            padding-top: 3px;
+            padding-left: 10px;
+            padding-right: 10px;
+            padding-bottom: 4px;
+            display: none;
+        }
+
+        .topic .info .tip .arrow {
+            width: 0;
+            height: 0;
+            position: absolute;
+            top: 50%;
+            right: 100%;
+            transform: translateY(-50%);
+            border-top: 5px solid transparent;
+            border-bottom: 5px solid transparent;
+            border-right: 6px solid #11B2FF;
         }
 
         .topic .user {
@@ -442,8 +477,8 @@
         footer {
             background: #fff;
             box-shadow: 0px -3px 8px rgba(0, 0, 0, 0.08);
-            padding-top: 40px;
-            padding-bottom: 25px;
+            padding-top: 60px;
+            padding-bottom: 60px;
             margin-top: 50px;
         }
 
@@ -529,9 +564,10 @@
                     <div class="card">
                         <div class="d-flex justify-content-between">
                             <p class="global-title">Набор и поиск команды</p>
-                            <button class="topic-add" onclick="window.location = '/teams/add';">Добавить<i class="fa-solid fa-rectangle-history-circle-plus"></i></button>
+                            <button class="topic-add" onclick="window.location = '/teams/add';">Добавить<i
+                                    class="fa-solid fa-rectangle-history-circle-plus"></i></button>
                         </div>
-                        
+
 
                         <% topics.forEach(topic=> { %>
 
@@ -543,8 +579,7 @@
                                             <i class="fa-solid fa-user-plus"></i>
                                             <% } %>
                                 </div>
-                                <div class="d-inline-flex flex-column title-subtitle"
-                                    onclick="window.location = '/teams';">
+                                <div class="d-inline-flex flex-column title-subtitle">
                                     <div class="title">
                                         <%= topic.title %>
                                     </div>
@@ -553,32 +588,40 @@
                                     </div>
                                 </div>
 
-                                <% if(topic.status == false) { %>
-                                <div class="d-inline-flex info"><i class="fa-solid fa-lock-open"></i></div>
-                                <% } else { %>
-                                    <div class="d-inline-flex info"><i class="fa-solid fa-lock"></i></div>
-                                    <% } %>
-
-                                <div class="user">
-                                    <img
-                                        src="https://crafatar.com/avatars/<%= topic.skin %>?default=54c32ed5ab7243e5a00eec680d514523">
-                                    <div class="d-inline-flex flex-column username-time">
-                                        <div class="d-inline-flex username">
-                                            <%= topic.username %>
+                                <% if(topic.status==false) { %>
+                                    <div class="d-inline-flex info">
+                                        <i class="fa-solid fa-lock-open"></i>
+                                        <div class="tip">Тема&nbsp;открыта<div class="arrow"></div>
                                         </div>
-                                        <div class="d-inline-flex time"><%= topic.lastOnline %></div>
                                     </div>
-                                </div>
+                                    <% } else { %>
+                                        <div class="d-inline-flex info"><i class="fa-solid fa-lock"></i></div>
+                                        <% } %>
 
-                                <div class="d-inline-flex flex-column counter">
-                                    <div class="records">∞<i class="fa-solid fa-message-lines"></i></div>
-                                    <div class="views">∞<i class="fa-solid fa-eye"></i></div>
-                                </div>
+                                            <div class="user">
+                                                <img
+                                                    src="https://crafatar.com/avatars/<%= topic.skin %>?default=54c32ed5ab7243e5a00eec680d514523">
+                                                <div class="d-inline-flex flex-column username-time">
+                                                    <div class="d-inline-flex username">
+                                                        <%= topic.username %>
+                                                    </div>
+                                                    <div class="d-inline-flex time">
+                                                        <%= topic.lastOnline %>
+                                                    </div>
+                                                </div>
+                                            </div>
 
-                                <div class="d-inline-flex flex-column date-status">
-                                    <div class="date"><%= topic.update %><i class="fa-solid fa-clock"></i></div>
-                                    <div class="status"><i class="fa-solid fa-lock-open"></i></div>
-                                </div>
+                                            <div class="d-inline-flex flex-column counter">
+                                                <div class="records">∞<i class="fa-solid fa-message-lines"></i></div>
+                                                <div class="views">∞<i class="fa-solid fa-eye"></i></div>
+                                            </div>
+
+                                            <div class="d-inline-flex flex-column date-status">
+                                                <div class="date">
+                                                    <%= topic.update %><i class="fa-solid fa-clock"></i>
+                                                </div>
+                                                <div class="status"><i class="fa-solid fa-lock-open"></i></div>
+                                            </div>
                             </div>
 
                             <% }); %>
@@ -626,6 +669,18 @@
                 </div>
             </div>
     </footer>
+
+    <script>
+        $(document).ready(function () {
+            var maxWidth = 0;
+            $('.user').each(function () {
+                if ($(this).outerWidth() > maxWidth) {
+                    maxWidth = $(this).outerWidth();
+                }
+            });
+            $('.user').width(maxWidth);
+        });
+    </script>
 </body>
 
 </html>
