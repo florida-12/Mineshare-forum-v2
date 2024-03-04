@@ -27,12 +27,14 @@
 <body>
     <style>
         body {
-            height: 100vh;
             background: #fff;
             background: url('../img/cloud-bg.png') repeat-x 0 / 90% auto;
-            height: 100px;
             animation: cloud-bg 60s linear infinite;
             margin: 0;
+        }
+
+        .container {
+            width: auto;
         }
 
         @keyframes cloud-bg {
@@ -43,6 +45,10 @@
             100% {
                 background-position: 100vw -100px;
             }
+        }
+
+        nav {
+            position: relative;
         }
 
         nav .navbar {
@@ -67,6 +73,11 @@
             font-weight: 600;
             font-size: 28px;
             text-decoration: none;
+        }
+
+        nav .navbar .logo a .forum {
+            color: #bdbdbe;
+            font-weight: 500;
         }
 
         nav .navbar .search {
@@ -134,7 +145,6 @@
             height: 50px;
             position: relative;
             background: linear-gradient(98.44deg, #8DEBFF 0%, #00ABFF 100%), #339DFF;
-            box-shadow: 0px 0px 10px rgba(113, 212, 255, 0.7);
             border-radius: 10px;
             border: none;
             font-size: 19px;
@@ -157,6 +167,7 @@
             padding-left: 25px;
             padding-right: 25px;
             padding-bottom: 25px;
+            margin-bottom: 25px;
         }
 
         .global-title {
@@ -253,7 +264,7 @@
             position: relative;
             background: #11B2FF;
             border-radius: 6px;
-            margin-right: 10px;
+            margin-right: 14px;
         }
 
         .topic .avatar i {
@@ -508,10 +519,10 @@
         footer {
             position: relative;
             background: #fff;
-            box-shadow: 0px -3px 8px rgba(0, 0, 0, 0.08);
+            box-shadow: 0px -2px 8px rgba(0, 0, 0, 0.08);
             padding-top: 60px;
             padding-bottom: 60px;
-            margin-top: 50px;
+            margin-top: 25px;
         }
 
         footer .group {
@@ -570,6 +581,10 @@
             nav .navbar .logo {
                 margin-top: 15.5px;
             }
+
+            nav .navbar .logo a .forum {
+                font-weight: 600;
+            }
         }
     </style>
 
@@ -579,8 +594,7 @@
                 <div class="d-flex justify-content-between">
                     <div class="logo">
                         <a href="/">Mineshare<br class="d-block d-sm-none"><span class="d-none d-sm-inline-flex"
-                                style="color: #bdbdbe; font-weight: 500;">｜</span><span
-                                style="color: #bdbdbe; font-weight: 500;">ФОРУМ</span></a>
+                                style="color: #bdbdbe; font-weight: 500;">｜</span><span class="forum">ФОРУМ</span></a>
                     </div>
                     <div>
                         <div class="d-none d-lg-inline-flex search">
@@ -592,8 +606,8 @@
 
                         <div class="d-inline-flex auth">
                             <% if (user) { %>
-                                <button class="auth-button d-none d-md-block">Кабинет</button>
-                                <button class="auth-button-mobile d-block d-md-none"><i
+                                <button class="auth-button d-none d-md-block" onclick="window.location = '/account';">Кабинет</button>
+                                <button class="auth-button-mobile d-block d-md-none" onclick="window.location = '/account';"><i
                                         class="fa-solid fa-user"></i></button>
                                 <% } else { %>
                                     <button class="auth-button d-none d-md-block"
@@ -609,9 +623,9 @@
         </div>
     </nav>
 
-    <div style="margin-top: 40px;">
+    <div style="position: relative; margin-top: 40px;">
         <div class="container">
-            <div class="row g-4">
+            <div class="row">
                 <div class="col-12 col-sm-12 col-md-12 col-lg-9">
                     <div class="card">
                         <p class="global-title">Актуальное</p>
@@ -623,16 +637,21 @@
                                 <div class="tip"></div>
                             </div>-->
 
-                            <div class="d-inline-flex avatar"><i class="fa-solid fa-people-group"></i></div>
-                            <div class="d-inline-flex flex-column title-subtitle" onclick="window.location = '/teams';">
-                                <div class="title">Набор и поиск команды</div>
-                                <div class="subtitle">Вы ищете партнеров? Создаете сервер? Хотите совместно работать над
-                                    проектом? В данном разделе вы можете собрать команду.</div>
+                            <div class="d-inline-flex justify-content-start">
+                                <div class="d-inline-flex avatar"><i class="fa-solid fa-people-group"></i></div>
+                                <div class="d-inline-flex flex-column title-subtitle"
+                                    onclick="window.location = '/teams';">
+                                    <div class="title">Набор и поиск команды</div>
+                                    <div class="subtitle">Вы ищете партнеров? Создаете сервер? Хотите совместно работать
+                                        над
+                                        проектом? В данном разделе вы можете собрать команду.</div>
+                                </div>
                             </div>
 
-                            <div class="d-inline-flex info"><i class="fa-solid fa-circle-question"></i></div>
 
-                            <div class="d-inline-flex flex-column counter">
+                            <div class="d-none d-sm-inline-flex info"><i class="fa-solid fa-circle-question"></i></div>
+
+                            <div class="d-none d-sm-inline-flex flex-column counter">
                                 <div class="records">
                                     <%= teams %><i class="fa-solid fa-message-lines"></i>
                                 </div>
@@ -641,62 +660,71 @@
                         </div>
 
                         <div class="topic">
-                            <div class="d-inline-flex avatar"><i class="fa-solid fa-file-certificate"></i></div>
-                            <div class="d-inline-flex flex-column title-subtitle"
-                                onclick="window.location = '/manuals';">
-                                <div class="title">Руководства и инструкции</div>
-                                <div class="subtitle">Полезная информация, которая поможет повысить эффективность работы
-                                    и успешно справиться с поставленными задачами.</div>
+                            <div class="d-inline-flex justify-content-start">
+                                <div class="d-inline-flex avatar"><i class="fa-solid fa-file-certificate"></i></div>
+                                <div class="d-inline-flex flex-column title-subtitle"
+                                    onclick="window.location = '/manuals';">
+                                    <div class="title">Руководства и инструкции</div>
+                                    <div class="subtitle">Полезная информация, которая поможет повысить эффективность
+                                        работы
+                                        и успешно справиться с поставленными задачами.</div>
+                                </div>
                             </div>
 
-                            <div class="d-inline-flex info"><i class="fa-solid fa-circle-question"></i></div>
+                            <div class="d-none d-sm-inline-flex info"><i class="fa-solid fa-circle-question"></i></div>
 
-                            <div class="d-inline-flex flex-column counter">
+                            <div class="d-none d-sm-inline-flex flex-column counter">
                                 <div class="records">∞<i class="fa-solid fa-message-lines"></i></div>
                                 <div class="views">∞<i class="fa-solid fa-eye"></i></div>
                             </div>
                         </div>
 
                         <div class="topic">
-                            <div class="d-inline-flex avatar"><i class="fa-solid fa-cubes"></i></div>
-                            <div class="d-inline-flex flex-column title-subtitle">
-                                <div class="title">Кубическое творчество</div>
-                                <div class="subtitle">...</div>
+                            <div class="d-inline-flex justify-content-start">
+                                <div class="d-inline-flex avatar"><i class="fa-solid fa-cubes"></i></div>
+                                <div class="d-inline-flex flex-column title-subtitle">
+                                    <div class="title">Кубическое творчество</div>
+                                    <div class="subtitle">...</div>
+                                </div>
                             </div>
 
-                            <div class="d-inline-flex info"><i class="fa-solid fa-circle-question"></i></div>
+                            <div class="d-none d-sm-inline-flex info"><i class="fa-solid fa-circle-question"></i></div>
 
-                            <div class="d-inline-flex flex-column counter">
+                            <div class="d-none d-sm-inline-flex flex-column counter">
                                 <div class="records">∞<i class="fa-solid fa-message-lines"></i></div>
                                 <div class="views">∞<i class="fa-solid fa-eye"></i></div>
                             </div>
                         </div>
 
                         <div class="topic">
-                            <div class="d-inline-flex avatar"><i class="fa-solid fa-swords"></i></div>
-                            <div class="d-inline-flex flex-column title-subtitle">
-                                <div class="title">Проведение турниров</div>
-                                <div class="subtitle">...</div>
+                            <div class="d-inline-flex justify-content-start">
+                                <div class="d-inline-flex avatar"><i class="fa-solid fa-swords"></i></div>
+                                <div class="d-inline-flex flex-column title-subtitle">
+                                    <div class="title">Проведение турниров</div>
+                                    <div class="subtitle">...</div>
+                                </div>
                             </div>
 
-                            <div class="d-inline-flex info"><i class="fa-solid fa-circle-question"></i></div>
+                            <div class="d-none d-sm-inline-flex info"><i class="fa-solid fa-circle-question"></i></div>
 
-                            <div class="d-inline-flex flex-column counter">
+                            <div class="d-none d-sm-inline-flex flex-column counter">
                                 <div class="records">∞<i class="fa-solid fa-message-lines"></i></div>
                                 <div class="views">∞<i class="fa-solid fa-eye"></i></div>
                             </div>
                         </div>
 
                         <div class="topic">
-                            <div class="d-inline-flex avatar"><i class="fa-solid fa-comment-dots"></i></div>
-                            <div class="d-inline-flex flex-column title-subtitle">
-                                <div class="title">Другие темы</div>
-                                <div class="subtitle">...</div>
+                            <div class="d-inline-flex justify-content-start">
+                                <div class="d-inline-flex avatar"><i class="fa-solid fa-comment-dots"></i></div>
+                                <div class="d-inline-flex flex-column title-subtitle">
+                                    <div class="title">Другие темы</div>
+                                    <div class="subtitle">...</div>
+                                </div>
                             </div>
 
-                            <div class="d-inline-flex info"><i class="fa-solid fa-circle-question"></i></div>
+                            <div class="d-none d-sm-inline-flex info"><i class="fa-solid fa-circle-question"></i></div>
 
-                            <div class="d-inline-flex flex-column counter">
+                            <div class="d-none d-sm-inline-flex flex-column counter">
                                 <div class="records">∞<i class="fa-solid fa-message-lines"></i></div>
                                 <div class="views">∞<i class="fa-solid fa-eye"></i></div>
                             </div>
@@ -705,42 +733,51 @@
                         <div class="line"></div>
 
                         <div class="topic">
-                            <div class="d-inline-flex avatar"><i class="fa-solid fa-block-question"></i></div>
-                            <div class="d-inline-flex flex-column title-subtitle">
-                                <div class="title">Скоро</div>
-                                <div class="subtitle">Следите за нашими обновлениями, чтобы быть в курсе всех новых
-                                    функций и улучшений, которые скоро будут доступны на форуме.</div>
+                            <div class="d-inline-flex justify-content-start">
+                                <div class="d-inline-flex avatar"><i class="fa-solid fa-block-question"></i></div>
+                                <div class="d-inline-flex flex-column title-subtitle">
+                                    <div class="title">Скоро</div>
+                                    <div class="subtitle">Следите за нашими обновлениями, чтобы быть в курсе всех новых
+                                        функций и улучшений, которые скоро будут доступны на форуме.</div>
+                                </div>
                             </div>
 
-                            <div class="d-inline-flex info"><i class="fa-solid fa-screwdriver-wrench"></i></div>
+                            <div class="d-none d-sm-inline-flex info"><i class="fa-solid fa-screwdriver-wrench"></i>
+                            </div>
                         </div>
 
                         <div class="topic">
-                            <div class="d-inline-flex avatar"><i class="fa-solid fa-block-question"></i></div>
-                            <div class="d-inline-flex flex-column title-subtitle">
-                                <div class="title">Скоро</div>
-                                <div class="subtitle">Следите за нашими обновлениями, чтобы быть в курсе всех новых
-                                    функций и улучшений, которые скоро будут доступны на форуме.</div>
+                            <div class="d-inline-flex justify-content-start">
+                                <div class="d-inline-flex avatar"><i class="fa-solid fa-block-question"></i></div>
+                                <div class="d-inline-flex flex-column title-subtitle">
+                                    <div class="title">Скоро</div>
+                                    <div class="subtitle">Следите за нашими обновлениями, чтобы быть в курсе всех новых
+                                        функций и улучшений, которые скоро будут доступны на форуме.</div>
+                                </div>
                             </div>
 
-                            <div class="d-inline-flex info"><i class="fa-solid fa-screwdriver-wrench"></i></div>
+                            <div class="d-none d-sm-inline-flex info"><i class="fa-solid fa-screwdriver-wrench"></i>
+                            </div>
                         </div>
 
                         <div class="topic" style="margin-bottom: 0;">
-                            <div class="d-inline-flex avatar"><i class="fa-solid fa-block-question"></i></div>
-                            <div class="d-inline-flex flex-column title-subtitle">
-                                <div class="title">Скоро</div>
-                                <div class="subtitle">Следите за нашими обновлениями, чтобы быть в курсе всех новых
-                                    функций и улучшений, которые скоро будут доступны на форуме.</div>
+                            <div class="d-inline-flex justify-content-start">
+                                <div class="d-inline-flex avatar"><i class="fa-solid fa-block-question"></i></div>
+                                <div class="d-inline-flex flex-column title-subtitle">
+                                    <div class="title">Скоро</div>
+                                    <div class="subtitle">Следите за нашими обновлениями, чтобы быть в курсе всех новых
+                                        функций и улучшений, которые скоро будут доступны на форуме.</div>
+                                </div>
                             </div>
 
-                            <div class="d-inline-flex info"><i class="fa-solid fa-screwdriver-wrench"></i></div>
+                            <div class="d-none d-sm-inline-flex info"><i class="fa-solid fa-screwdriver-wrench"></i>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="col-12 col-sm-12 col-md-6 col-lg-3">
-                    <div class="card">
-                        <div class="picture"><img src="/img/home-picture.gif"></div>
+                    <div class="card panel">
+                        <div class="picture d-none d-sm-block"><img src="/img/home-picture.gif"></div>
 
                         <div class="monitoring">
                             <button onclick="window.location = 'https://mineshare.top';">Мониторинг<i
@@ -814,21 +851,21 @@
                     </div>
                 </div>
                 <div class="col-6 d-block d-md-none">
-                    <div>
+                    <div style="padding-left: 10px;">
                         <div class="group">Ссылки</div>
                         <div class="link"><a>Команда разработчиков</a></div>
                         <div class="link"><a>Подробности проекта</a></div>
                     </div>
                 </div>
                 <div class="col-6 d-block d-md-none">
-                    <div style="margin-bottom: 60px;">
+                    <div style="margin-bottom: 50px;">
                         <div class="group">Информация</div>
                         <div class="link"><a>Условия использования</a></div>
                         <div class="link"><a>Политика конфиденциальности</a></div>
                     </div>
                 </div>
                 <div class="col-6 d-block d-md-none">
-                    <div>
+                    <div style="padding-left: 10px;">
                         <div class="group">Услуги</div>
                         <div class="link"><a>Партнёрские программы</a></div>
                         <div class="link"><a>Магазин мониторинга</a></div>
@@ -842,6 +879,7 @@
                     </div>
                 </div>
             </div>
+        </div>
     </footer>
 </body>
 

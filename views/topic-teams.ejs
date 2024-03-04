@@ -204,7 +204,7 @@
             padding-top: 30px;
             padding-left: 30px;
             padding-right: 30px;
-            padding-bottom: 30px;
+            padding-bottom: 25px;
         }
 
         .list .line {
@@ -240,7 +240,8 @@
             font-family: 'TT Norms Pro', sans-serif;
             font-size: 18px;
             font-weight: 600;
-            margin-right: 5px;
+            margin-top: 3px;
+            margin-right: 9.5px;
         }
 
         .list .contact {
@@ -254,6 +255,7 @@
             padding-right: 8px;
             padding-bottom: 7px;
             margin-right: 5px;
+            margin-bottom: 7px;
         }
 
         footer {
@@ -345,13 +347,17 @@
                 <div class="col-2">
                     <div class="d-flex justify-content-end" style="margin-right: 20px;">
                         <div>
-                            <div class="back" onclick="history.back()"><i class="fa-solid fa-arrow-left-from-line"></i>вернуться</div>
+                            <div class="back" onclick="history.back()"><i
+                                    class="fa-solid fa-arrow-left-from-line"></i>вернуться</div>
                             <div class="card">
                                 <div class="user">
                                     <div class="avatar">
-                                        <img src="https://crafatar.com/avatars/<%= topics[0].skin %>?default=54c32ed5ab7243e5a00eec680d514523">
+                                        <img
+                                            src="https://crafatar.com/avatars/<%= topics[0].skin %>?default=54c32ed5ab7243e5a00eec680d514523">
                                     </div>
-                                    <div class="username"><%= topics[0].username %></div>
+                                    <div class="username">
+                                        <%= topics[0].username %>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -367,19 +373,21 @@
                                 <div class="line"></div>
                                 <div class="description"><%- topic.description.replace(/\n/g, '<br>' ) %> %></div>
                                 <div class="line"></div>
-                                <div>
+                                <div class="d-flex justify-content-start">
                                     <div class="d-inline-flex title-contact">Контакты:</div>
                                     <% if (Array.isArray(JSON.parse(topic.contact))) { %>
-                                        <% JSON.parse(topic.contact).forEach(item=> { %>
-                                            <div class="d-inline-flex contact">
-                                                <%= item %>
-                                            </div>
-                                            <% }); %>
-                                                <% } else { %>
-                                                    <div class="d-inline-flex contact">
-                                                        <%= JSON.parse(topic.contact) %>
-                                                    </div>
-                                                    <% } %>
+                                        <div>
+                                            <% JSON.parse(topic.contact).forEach(item=> { %>
+                                                <div class="d-inline-flex contact">
+                                                    <%= item %>
+                                                </div>
+                                                <% }); %>
+                                                    <% } else { %>
+                                                        <div class="d-inline-flex contact">
+                                                            <%= JSON.parse(topic.contact) %>
+                                                        </div>
+                                                        <% } %>
+                                        </div>
                                 </div>
                             </div>
                         </div>
