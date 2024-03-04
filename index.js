@@ -236,52 +236,29 @@ function isAuthenticated(req, res, next) {
 app.get('/account', isAuthenticated, (req, res) => {
     if (!req.path.endsWith('/') && req.path !== '/') return res.redirect(301, req.path + '/');
 
-    pool.query(`SELECT * FROM servers WHERE owner = $1;`, [req.user.id], async (err, result) => {
+    pool.query(`SELECT * FROM forum_teams WHERE owner = $1;`, [req.user.id], (err, result) => {
         if (err) {
             console.error(err);
             return res.status(500).send('Internal Server Error');
         }
 
-        if (req.user.admin) {
-            let admin_servers = await pool.query(`SELECT * FROM servers ORDER BY -id;`);
-            let comments = await pool.query(`SELECT sc.server_id, sc.user_id, u.username, u.admin, sc.message, sc.date FROM servers_comments sc JOIN users u ON sc.user_id = u.id ORDER BY date DESC;`);
-            let applications = await pool.query(`SELECT * FROM applications_bedwars ORDER BY date DESC;`);
+        updateOnlineStatus(req.user.email);
 
-            admin_servers.rows.forEach(server => {
-                const regdate = new Date(server.regdate);
+        res.render('account', { user: req.user, teams: result.rows });
+    });
+});
 
-                const moscowTime = moment.tz(regdate, 'Europe/Moscow');
+app.post('/account/skin', isAuthenticated, (req, res) => {
+    let { skin } = req.body;
+    skin = skin.replace('-', '');
 
-                const formattedDate = moscowTime.locale('ru').format('DD MMMM (HH:mm)');
-
-                server.regdate = formattedDate;
-            });
-
-            comments.rows.forEach(comment => {
-                const date = new Date(comment.date);
-
-                const moscowTime = moment.tz(date, 'Europe/Moscow');
-
-                const formattedDate = moscowTime.locale('ru').format('DD MMMM (HH:mm)');
-
-                comment.date = formattedDate;
-            });
-
-            applications.rows.forEach(application => {
-                const date = new Date(application.date);
-
-                const moscowTime = moment.tz(date, 'Europe/Moscow');
-
-                const formattedDate = moscowTime.locale('ru').format('DD MMMM (HH:mm)');
-
-                application.date = formattedDate;
-            });
-
-            return res.render('account', { url: req.url, user: req.user, servers: result.rows, admin_servers: admin_servers.rows, comments: comments.rows, applications: applications.rows, footer: footer_html });
-
-        } else {
-            res.render('account', { url: req.url, user: req.user, servers: result.rows, admin_servers: null, footer: footer_html });
+    pool.query(`UPDATE users SET skin = $1 WHERE id = $2;`, [skin, req.user.id], (err, result) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).send('Internal Server Error');
         }
+
+        res.redirect('/account');
     });
 });
 
