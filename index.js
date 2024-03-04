@@ -360,8 +360,6 @@ app.get('/teams', (req, res) => {
         }
 
         result.rows.forEach(row => {
-            row.update = moment.tz(row.update, 'Europe/Moscow').locale('ru').format('D MMM HH:mm');
-
             const yourDateTime = new Date(row.logdate);
             yourDateTime.setHours(yourDateTime.getHours() - 2);
 
@@ -376,6 +374,24 @@ app.get('/teams', (req, res) => {
             } else {
                 const diffInHours = Math.floor(diffInMinutes / 60);
                 row.lastOnline = `${diffInHours} ${pluralize(diffInHours, 'час', 'часа', 'часов')} назад`;
+            }
+        });
+
+        result.rows.forEach(row => {
+            const yourDateTime = new Date(row.update);
+            yourDateTime.setHours(yourDateTime.getHours() - 2);
+
+            const currentDateTime = new Date();
+
+            const differenceInMilliseconds = yourDateTime - currentDateTime;
+
+            const diffInMinutes = Math.abs(Math.floor(differenceInMilliseconds / (1000 * 60)));
+
+            if (diffInMinutes < 60) {
+                row.update = `${diffInMinutes} ${pluralize(diffInMinutes, 'минуту', 'минуты', 'минут')} назад`;
+            } else {
+                const diffInHours = Math.floor(diffInMinutes / 60);
+                row.update = `${diffInHours} ${pluralize(diffInHours, 'час', 'часа', 'часов')} назад`;
             }
         });
 
