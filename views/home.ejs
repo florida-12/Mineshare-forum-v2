@@ -113,7 +113,7 @@
             color: #fff;
         }
 
-        nav .navbar .auth button {
+        nav .navbar .auth .auth-button {
             width: 150px;
             height: 50px;
             background: linear-gradient(98.44deg, #8DEBFF 0%, #00ABFF 100%), #339DFF;
@@ -127,6 +127,27 @@
             padding-bottom: 4px;
             margin-top: 22.5px;
             cursor: pointer;
+        }
+
+        nav .navbar .auth .auth-button-mobile {
+            width: 50px;
+            height: 50px;
+            position: relative;
+            background: linear-gradient(98.44deg, #8DEBFF 0%, #00ABFF 100%), #339DFF;
+            box-shadow: 0px 0px 10px rgba(113, 212, 255, 0.7);
+            border-radius: 10px;
+            border: none;
+            font-size: 19px;
+            color: #fff;
+            margin-top: 22.5px;
+            cursor: pointer;
+        }
+
+        nav .navbar .auth .auth-button-mobile i {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
         }
 
         .card {
@@ -208,6 +229,7 @@
             padding-right: 20px;
             padding-bottom: 16px;
             margin-bottom: 20px;
+            overflow: hidden;
             cursor: pointer;
             user-select: none;
         }
@@ -484,6 +506,7 @@
         }
 
         footer {
+            position: relative;
             background: #fff;
             box-shadow: 0px -3px 8px rgba(0, 0, 0, 0.08);
             padding-top: 60px;
@@ -536,6 +559,18 @@
             color: #fff;
             font-size: 18px;
         }
+
+        @media (max-width: 575.98px) {
+            nav .navbar {
+                padding-left: 25px;
+                padding-right: 25px;
+                margin-top: 20px;
+            }
+
+            nav .navbar .logo {
+                margin-top: 15.5px;
+            }
+        }
     </style>
 
     <nav>
@@ -543,10 +578,12 @@
             <div class="navbar">
                 <div class="d-flex justify-content-between">
                     <div class="logo">
-                        <a href="/">Mineshare<span style="color: #bdbdbe; font-weight: 500;">｜ФОРУМ</span></a>
+                        <a href="/">Mineshare<br class="d-block d-sm-none"><span class="d-none d-sm-inline-flex"
+                                style="color: #bdbdbe; font-weight: 500;">｜</span><span
+                                style="color: #bdbdbe; font-weight: 500;">ФОРУМ</span></a>
                     </div>
                     <div>
-                        <div class="d-inline-flex search">
+                        <div class="d-none d-lg-inline-flex search">
                             <form>
                                 <input name="search" type="text" placeholder="Мини-игры..">
                                 <button><i class="fa-solid fa-magnifying-glass"></i></button>
@@ -555,9 +592,15 @@
 
                         <div class="d-inline-flex auth">
                             <% if (user) { %>
-                                <button>Кабинет</button>
+                                <button class="auth-button d-none d-md-block">Кабинет</button>
+                                <button class="auth-button-mobile d-block d-md-none"><i
+                                        class="fa-solid fa-user"></i></button>
                                 <% } else { %>
-                                    <button onclick="window.location = '/login';">Войти</button>
+                                    <button class="auth-button d-none d-md-block"
+                                        onclick="window.location = '/login';">Войти</button>
+                                    <button class="auth-button-mobile d-block d-md-none"
+                                        onclick="window.location = '/login';"><i
+                                            class="fa-solid fa-arrow-right-to-bracket"></i></button>
                                     <% } %>
                         </div>
                     </div>
@@ -569,7 +612,7 @@
     <div style="margin-top: 40px;">
         <div class="container">
             <div class="row g-4">
-                <div class="col-9">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-9">
                     <div class="card">
                         <p class="global-title">Актуальное</p>
 
@@ -590,14 +633,17 @@
                             <div class="d-inline-flex info"><i class="fa-solid fa-circle-question"></i></div>
 
                             <div class="d-inline-flex flex-column counter">
-                                <div class="records"><%= teams %><i class="fa-solid fa-message-lines"></i></div>
+                                <div class="records">
+                                    <%= teams %><i class="fa-solid fa-message-lines"></i>
+                                </div>
                                 <div class="views">∞<i class="fa-solid fa-eye"></i></div>
                             </div>
                         </div>
 
                         <div class="topic">
                             <div class="d-inline-flex avatar"><i class="fa-solid fa-file-certificate"></i></div>
-                            <div class="d-inline-flex flex-column title-subtitle" onclick="window.location = '/manuals';">
+                            <div class="d-inline-flex flex-column title-subtitle"
+                                onclick="window.location = '/manuals';">
                                 <div class="title">Руководства и инструкции</div>
                                 <div class="subtitle">Полезная информация, которая поможет повысить эффективность работы
                                     и успешно справиться с поставленными задачами.</div>
@@ -692,7 +738,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-3">
+                <div class="col-12 col-sm-12 col-md-6 col-lg-3">
                     <div class="card">
                         <div class="picture"><img src="/img/home-picture.gif"></div>
 
@@ -735,7 +781,7 @@
     <footer>
         <div class="container">
             <div class="row">
-                <div class="col-12">
+                <div class="col-12 d-none d-md-block">
                     <div class="d-flex justify-content-between">
                         <div>
                             <div class="group">Ссылки</div>
@@ -765,6 +811,34 @@
                             <div class="discord" onclick="window.open('https://discord.gg/mineshare', '_blank')"><i
                                     class="fa-brands fa-discord"></i></div>
                         </div>
+                    </div>
+                </div>
+                <div class="col-6 d-block d-md-none">
+                    <div>
+                        <div class="group">Ссылки</div>
+                        <div class="link"><a>Команда разработчиков</a></div>
+                        <div class="link"><a>Подробности проекта</a></div>
+                    </div>
+                </div>
+                <div class="col-6 d-block d-md-none">
+                    <div style="margin-bottom: 60px;">
+                        <div class="group">Информация</div>
+                        <div class="link"><a>Условия использования</a></div>
+                        <div class="link"><a>Политика конфиденциальности</a></div>
+                    </div>
+                </div>
+                <div class="col-6 d-block d-md-none">
+                    <div>
+                        <div class="group">Услуги</div>
+                        <div class="link"><a>Партнёрские программы</a></div>
+                        <div class="link"><a>Магазин мониторинга</a></div>
+                    </div>
+                </div>
+                <div class="col-6 d-block d-md-none">
+                    <div>
+                        <div class="group">Помощь</div>
+                        <div class="link"><a>Техническая поддержка</a></div>
+                        <div class="link"><a>Сообщить о нарушении</a></div>
                     </div>
                 </div>
             </div>
