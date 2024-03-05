@@ -606,9 +606,10 @@
 
                         <div class="d-inline-flex auth">
                             <% if (user) { %>
-                                <button class="auth-button d-none d-md-block" onclick="window.location = '/account';">Кабинет</button>
-                                <button class="auth-button-mobile d-block d-md-none" onclick="window.location = '/account';"><i
-                                        class="fa-solid fa-user"></i></button>
+                                <button class="auth-button d-none d-md-block"
+                                    onclick="window.location = '/account';">Кабинет</button>
+                                <button class="auth-button-mobile d-block d-md-none"
+                                    onclick="window.location = '/account';"><i class="fa-solid fa-user"></i></button>
                                 <% } else { %>
                                     <button class="auth-button d-none d-md-block"
                                         onclick="window.location = '/login';">Войти</button>
@@ -794,7 +795,11 @@
                                         <div class="username">
                                             <%= user.username %>
                                         </div>
-                                        <div class="major moder">[модератор]</div>
+                                        <% if (user.admin) { %>
+                                            <div class="major admin">[администратор]</div>
+                                            <% } else if (user.moder) { %>
+                                                <div class="major moder">[модератор]</div>
+                                                <% } %>
                                     </div>
                                     <% if (user.online_minutes <=5) { %>
                                         <div class="status-online">● онлайн</div>

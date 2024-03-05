@@ -290,7 +290,7 @@ function pluralize(number, one, few, many) {
 }
 
 app.get('/', (req, res) => {
-    pool.query(`SELECT username, skin, logdate FROM users WHERE admin = true;`, async (err, result) => {
+    pool.query(`SELECT username, skin, moder, admin, logdate FROM users WHERE admin = true OR moder = true ORDER BY admin DESC;`, async (err, result) => {
         if (err) {
             console.error(err);
             return res.status(500).send('Internal Server Error');
