@@ -738,7 +738,7 @@
 
             $('#test_title').text($('#title').val());
             $('#test_version').text($('#version').val());
-            $('#test_description').text($('#description').val());
+            $('#test_description').html($('#description').val().replace(/\n/g, "<br>"));
 
             $('#test_contact').html('');
             var contacts = Object.values($('[name="contacts"]'));
