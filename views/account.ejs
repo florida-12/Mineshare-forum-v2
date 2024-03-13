@@ -83,26 +83,36 @@
 
         nav .navbar .search {
             height: 50px;
-            background: #fff;
-            box-shadow: 0 0 3px rgba(0, 0, 0, 0.15);
+            background: #f9f9f9;
+            box-shadow: 0 0 1px rgba(0, 0, 0, 0.5);
             border-radius: 10px;
             padding-left: 10px;
             padding-right: 10px;
             margin-top: 22.5px;
-            margin-right: 12px;
+            margin-right: 14px;
             vertical-align: top;
         }
 
         nav .navbar .search input {
-            height: 34px;
-            border: none;
-            font-family: 'TT Norms Pro', sans-serif;
+            min-width: 200px;
+            height: 29.34px;
+            border-radius: 6px 0 0 6px;
+            border: 1.5px solid #e2e2e2;
+            font-family: "Nunito", sans-serif;
+            font-size: 14px;
             vertical-align: top;
-            margin-top: 6px;
+            padding: 0;
+            padding-left: 8px;
+            padding-right: 8px;
+            margin-top: 9px;
         }
 
         nav .navbar .search input:focus {
             outline: none;
+        }
+
+        nav .navbar .search input::placeholder {
+            color: #b6b6b6;
         }
 
         nav .navbar .search button {
@@ -110,10 +120,11 @@
             height: 32px;
             position: relative;
             background: #11B2FF;
-            border-radius: 6px;
+            border-radius: 0 6px 6px 0;
             border: none;
             vertical-align: top;
             margin-top: 9px;
+            margin-left: 4px;
             cursor: pointer;
         }
 
@@ -129,7 +140,6 @@
             width: 150px;
             height: 50px;
             background: linear-gradient(98.44deg, #8DEBFF 0%, #00ABFF 100%), #339DFF;
-            box-shadow: 0px 0px 10px rgba(113, 212, 255, 0.7);
             border-radius: 10px;
             border: none;
             font-size: 19px;
@@ -380,6 +390,7 @@
             color: #11B2FF;
             font-size: 22px;
         }
+
         .topic .up {
             width: 50px;
             height: 50px;
@@ -398,7 +409,7 @@
 
         .topic .up i {
             position: absolute;
-            top: 50%;
+            top: 51%;
             left: 50%;
             transform: translate(-50%, -50%);
             color: #11B2FF;
@@ -447,6 +458,56 @@
             border-radius: 10px;
         }
 
+        .panel .username {
+            background: #fff;
+            box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.05);
+            border-radius: 10px;
+            padding-top: 20px;
+            padding-left: 20px;
+            padding-right: 20px;
+            padding-bottom: 20px;
+        }
+
+        .panel .username input {
+            width: calc(100% - 24px);
+            height: 29px;
+            border: 2px solid #ebebeb;
+            border-radius: 6px;
+            color: #3A4E57;
+            font-family: 'TT Norms Pro', sans-serif;
+            font-size: 16px;
+            padding-left: 9px;
+            padding-right: 9px;
+            padding-bottom: 2px;
+            vertical-align: top;
+            outline: none;
+        }
+
+        .panel .username input:focus {
+            border: 2px solid #11B2FF;
+        }
+
+        .panel .username .save {
+            width: 32px;
+            height: 32px;
+            position: relative;
+            background: #11B2FF;
+            border: 2px solid #ebebeb;
+            border-radius: 6px;
+            float: right;
+            cursor: pointer;
+            display: none;
+        }
+
+        .panel .username .save i {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #fff;
+            font-size: 16px;
+        }
+
         .monitoring {
             background: #fff;
             box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.05);
@@ -482,90 +543,6 @@
         .monitoring button i {
             margin-left: 7px;
             font-size: 13px;
-        }
-
-        .moderation {
-            background: #fff;
-            box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.05);
-            border-radius: 10px;
-            padding-top: 20px;
-            padding-left: 20px;
-            padding-right: 20px;
-            padding-bottom: 16px;
-        }
-
-        .moderation .user {
-            position: relative;
-        }
-
-        .moderation .user .info {
-            vertical-align: top;
-        }
-
-        .moderation .user .avatar {
-            width: 30px;
-            height: 30px;
-            position: relative;
-            border-radius: 3px;
-            overflow: hidden;
-            margin-right: 6px;
-        }
-
-        .moderation .user .avatar img {
-            width: 100%;
-            height: auto;
-        }
-
-        .moderation .user .username {
-            color: #3A4E57;
-            font-family: 'TT Norms Pro', sans-serif;
-            font-size: 14px;
-            font-weight: 600;
-            margin-top: -1px;
-        }
-
-        .moderation .user .major {
-            font-family: 'TT Norms Pro', sans-serif;
-            font-size: 11px;
-            font-weight: 500;
-            margin-top: -1px;
-        }
-
-        .moderation .user .moder {
-            color: #0F9D58;
-        }
-
-        .moderation .user .admin {
-            color: #cc1f1f;
-        }
-
-        .moderation .user .status-online {
-            position: absolute;
-            top: -2px;
-            right: 0;
-            color: #49de3f;
-            font-family: 'TT Norms Pro', sans-serif;
-            font-size: 10px;
-            font-weight: 500;
-        }
-
-        .moderation .user .status-offline {
-            position: absolute;
-            top: -2px;
-            right: 0;
-            color: #b9b9b9;
-            font-family: 'TT Norms Pro', sans-serif;
-            font-size: 10px;
-            font-weight: 500;
-        }
-
-        .moderation .line {
-            width: 100%;
-            height: 2px;
-            border-radius: 40px;
-            background: #ededed;
-            margin-top: 8px;
-            margin-bottom: 12px;
         }
 
         footer {
@@ -744,9 +721,7 @@
                     </div>
 
                     <div class="d-flex justify-content-center">
-                        <img id="skin_img"
-                            src="https://mc-heads.net/avatar/<%= user.skin %>"
-                            alt="Скин не найден">
+                        <img id="skin_img" src="https://mc-heads.net/avatar/<%= user.skin %>" alt="Скин не найден">
                     </div>
 
                     <div class="d-flex justify-content-center">
@@ -772,7 +747,7 @@
                     <div>
                         <div class="d-none d-lg-inline-flex search">
                             <form>
-                                <input name="search" type="text" placeholder="Мини-игры..">
+                                <input name="search" type="text" placeholder="Мини-игры">
                                 <button><i class="fa-solid fa-magnifying-glass"></i></button>
                             </form>
                         </div>
@@ -800,13 +775,17 @@
                         <div class="avatar">
                             <div class="edit" onclick="openSkinModal();"><i class="fa-solid fa-image-polaroid-user"></i>
                             </div>
-                            <img
-                                src="https://mc-heads.net/avatar/<%= user.skin %>/600">
+                            <img src="https://mc-heads.net/avatar/<%= user.skin %>/600">
                         </div>
 
-                        <div class="monitoring">
-                            <button onclick="window.location = 'https://mineshare.top/account';">Мониторинг<i
-                                    class="fa-solid fa-arrow-right-from-bracket"></i></button>
+                        <div class="username">
+                            <form action="/account/username" method="post">
+                                <input id="username_input" class="d-inline-flex" name="username" value="<%= user.username %>"
+                                    placeholder="Никнейм" maxlength="20">
+                                <div id="username_save" class="save"
+                                    onclick="$('body').css('overflow', 'hidden'); $('.loading').css('display', 'block'); $(this).parent().submit();">
+                                    <i class="fa-solid fa-check"></i></div>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -836,16 +815,23 @@
                                 </div>
 
                                 <% if (topic.status) { %>
-                                    <div class="d-none d-sm-inline-flex info" onclick="$('body').css('overflow', 'hidden'); $('.loading').css('display', 'block'); window.location = '/account/teams/<%= topic.identifier %>/open';"><i class="fa-solid fa-lock"></i></div>
+                                    <div class="d-none d-sm-inline-flex info"
+                                        onclick="$('body').css('overflow', 'hidden'); $('.loading').css('display', 'block'); window.location = '/account/teams/<%= topic.identifier %>/open';">
+                                        <i class="fa-solid fa-lock"></i></div>
                                     <% } else { %>
-                                        <div class="d-none d-sm-inline-flex info" onclick="$('body').css('overflow', 'hidden'); $('.loading').css('display', 'block'); window.location = '/account/teams/<%= topic.identifier %>/close';"><i class="fa-solid fa-lock-open"></i></div>
+                                        <div class="d-none d-sm-inline-flex info"
+                                            onclick="$('body').css('overflow', 'hidden'); $('.loading').css('display', 'block'); window.location = '/account/teams/<%= topic.identifier %>/close';">
+                                            <i class="fa-solid fa-lock-open"></i></div>
                                         <% } %>
 
-                                <div class="d-none d-sm-inline-flex info"><i class="fa-solid fa-pen-clip"></i></div>
+                                            <div class="d-none d-sm-inline-flex info"><i
+                                                    class="fa-solid fa-pen-clip"></i></div>
 
-                                <% if (!topic.status) { %>
-                                <div class="d-none d-sm-inline-flex up" onclick="$('body').css('overflow', 'hidden'); $('.loading').css('display', 'block'); window.location = '/account/teams/<%= topic.identifier %>/up';"><i class="fa-solid fa-up-to-line"></i></div>
-                                <% } %>
+                                            <% if (!topic.status) { %>
+                                                <div class="d-none d-sm-inline-flex up"
+                                                    onclick="$('body').css('overflow', 'hidden'); $('.loading').css('display', 'block'); window.location = '/account/teams/<%= topic.identifier %>/up';">
+                                                    <i class="fa-solid fa-up-to-line"></i></div>
+                                                <% } %>
                             </div>
                             <% }); %>
                     </div>
@@ -932,6 +918,19 @@
 
         $('#skin_input').on("change", function () {
             updateSkin();
+        });
+
+        $('#username_input').on("change", function () {
+            const old = '<%= user.username %>';
+
+            if ($('#username_input').val() != old) {
+                console.log(true);
+                $('#username_input').css('width', 'calc(100% - 68px)');
+                $('#username_save').css('display', 'inline-flex');
+            } else {
+                $('#username_input').css('width', 'calc(100% - 24px)');
+                $('#username_save').css('display', 'none');
+            }
         });
     </script>
 </body>

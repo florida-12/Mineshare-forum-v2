@@ -69,7 +69,6 @@ app.use(passport.session());
 
 let footer_html;
 
-
 fs.readFile(path.join(__dirname, 'views/footer.ejs'), 'utf-8')
     .then(content => {
         footer_html = content;
@@ -245,6 +244,19 @@ app.get('/account', isAuthenticated, (req, res) => {
         updateOnlineStatus(req.user.email);
 
         res.render('account', { user: req.user, teams: result.rows });
+    });
+});
+
+app.post('/account/username', isAuthenticated, (req, res) => {
+    const { username } = req.body;
+
+    pool.query(`UPDATE users SET username = $1 WHERE id = $2;`, [username, req.user.id], (err, result) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).send('Internal Server Error');
+        }
+
+        res.redirect('/account');
     });
 });
 
