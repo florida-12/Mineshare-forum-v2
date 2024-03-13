@@ -26,12 +26,14 @@
 <body>
     <style>
         body {
-            height: 100vh;
             background: #fff;
             background: url('../img/cloud-bg.png') repeat-x 0 / 90% auto;
-            height: 100px;
             animation: cloud-bg 60s linear infinite;
             margin: 0;
+        }
+
+        .container {
+            width: auto;
         }
 
         @keyframes cloud-bg {
@@ -42,6 +44,10 @@
             100% {
                 background-position: 100vw -100px;
             }
+        }
+
+        nav {
+            position: relative;
         }
 
         nav .navbar {
@@ -68,28 +74,43 @@
             text-decoration: none;
         }
 
+        nav .navbar .logo a .forum {
+            color: #bdbdbe;
+            font-weight: 500;
+        }
+
         nav .navbar .search {
             height: 50px;
-            background: #fff;
-            box-shadow: 0 0 3px rgba(0, 0, 0, 0.15);
+            background: #f9f9f9;
+            box-shadow: 0 0 1px rgba(0, 0, 0, 0.5);
             border-radius: 10px;
             padding-left: 10px;
             padding-right: 10px;
             margin-top: 22.5px;
-            margin-right: 12px;
+            margin-right: 14px;
             vertical-align: top;
         }
 
         nav .navbar .search input {
-            height: 34px;
-            border: none;
-            font-family: 'TT Norms Pro', sans-serif;
+            min-width: 200px;
+            height: 29.34px;
+            border-radius: 6px 0 0 6px;
+            border: 1.5px solid #e2e2e2;
+            font-family: "Nunito", sans-serif;
+            font-size: 14px;
             vertical-align: top;
-            margin-top: 6px;
+            padding: 0;
+            padding-left: 8px;
+            padding-right: 8px;
+            margin-top: 9px;
         }
 
         nav .navbar .search input:focus {
             outline: none;
+        }
+
+        nav .navbar .search input::placeholder {
+            color: #b6b6b6;
         }
 
         nav .navbar .search button {
@@ -97,10 +118,11 @@
             height: 32px;
             position: relative;
             background: #11B2FF;
-            border-radius: 6px;
+            border-radius: 0 6px 6px 0;
             border: none;
             vertical-align: top;
             margin-top: 9px;
+            margin-left: 4px;
             cursor: pointer;
         }
 
@@ -112,11 +134,10 @@
             color: #fff;
         }
 
-        nav .navbar .auth button {
+        nav .navbar .auth .auth-button {
             width: 150px;
             height: 50px;
             background: linear-gradient(98.44deg, #8DEBFF 0%, #00ABFF 100%), #339DFF;
-            box-shadow: 0px 0px 10px rgba(113, 212, 255, 0.7);
             border-radius: 10px;
             border: none;
             font-size: 19px;
@@ -126,6 +147,26 @@
             padding-bottom: 4px;
             margin-top: 22.5px;
             cursor: pointer;
+        }
+
+        nav .navbar .auth .auth-button-mobile {
+            width: 50px;
+            height: 50px;
+            position: relative;
+            background: linear-gradient(98.44deg, #8DEBFF 0%, #00ABFF 100%), #339DFF;
+            border-radius: 10px;
+            border: none;
+            font-size: 19px;
+            color: #fff;
+            margin-top: 22.5px;
+            cursor: pointer;
+        }
+
+        nav .navbar .auth .auth-button-mobile i {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
         }
 
         .back {
@@ -311,6 +352,22 @@
             color: #fff;
             font-size: 18px;
         }
+
+        @media (max-width: 575.98px) {
+            nav .navbar {
+                padding-left: 25px;
+                padding-right: 25px;
+                margin-top: 20px;
+            }
+
+            nav .navbar .logo {
+                margin-top: 15.5px;
+            }
+
+            nav .navbar .logo a .forum {
+                font-weight: 600;
+            }
+        }
     </style>
 
     <nav>
@@ -318,21 +375,29 @@
             <div class="navbar">
                 <div class="d-flex justify-content-between">
                     <div class="logo">
-                        <a href="/">Mineshare<span style="color: #bdbdbe; font-weight: 500;">｜ФОРУМ</span></a>
+                        <a href="/">Mineshare<br class="d-block d-sm-none"><span class="d-none d-sm-inline-flex"
+                                style="color: #bdbdbe; font-weight: 500;">｜</span><span class="forum">ФОРУМ</span></a>
                     </div>
                     <div>
-                        <div class="d-inline-flex search">
+                        <div class="d-none d-lg-inline-flex search">
                             <form>
-                                <input name="search" type="text" placeholder="Мини-игры..">
+                                <input name="search" type="text" placeholder="Мини-игры">
                                 <button><i class="fa-solid fa-magnifying-glass"></i></button>
                             </form>
                         </div>
 
                         <div class="d-inline-flex auth">
                             <% if (user) { %>
-                                <button>Кабинет</button>
+                                <button class="auth-button d-none d-md-block"
+                                    onclick="window.location = '/account';">Кабинет</button>
+                                <button class="auth-button-mobile d-block d-md-none"
+                                    onclick="window.location = '/account';"><i class="fa-solid fa-user"></i></button>
                                 <% } else { %>
-                                    <button onclick="window.location = '/login';">Войти</button>
+                                    <button class="auth-button d-none d-md-block"
+                                        onclick="window.location = '/login';">Войти</button>
+                                    <button class="auth-button-mobile d-block d-md-none"
+                                        onclick="window.location = '/login';"><i
+                                            class="fa-solid fa-arrow-right-to-bracket"></i></button>
                                     <% } %>
                         </div>
                     </div>
@@ -352,8 +417,7 @@
                             <div class="card">
                                 <div class="user">
                                     <div class="avatar">
-                                        <img
-                                            src="https://mc-heads.net/avatar/<%= topics[0].skin %>/600">
+                                        <img src="https://mc-heads.net/avatar/<%= topics[0].skin %>/600">
                                     </div>
                                     <div class="username">
                                         <%= topics[0].username %>
@@ -372,23 +436,25 @@
                                 </div>
                                 <div class="line"></div>
                                 <div class="description"><%- topic.description.replace(/\n/g, '<br>' ) %> %></div>
-                                <div class="line"></div>
-                                <div class="d-flex justify-content-start">
-                                    <div class="d-inline-flex title-contact">Контакты:</div>
-                                    <% if (Array.isArray(JSON.parse(topic.contact))) { %>
-                                        <div>
-                                            <% JSON.parse(topic.contact).forEach(item=> { %>
-                                                <div class="d-inline-flex contact">
-                                                    <%= item %>
-                                                </div>
-                                                <% }); %>
-                                                    <% } else { %>
-                                                        <div class="d-inline-flex contact">
-                                                            <%= JSON.parse(topic.contact) %>
-                                                        </div>
-                                                        <% } %>
-                                        </div>
-                                </div>
+                                <% if (!topic.status) { %>
+                                    <div class="line"></div>
+                                    <div class="d-flex justify-content-start">
+                                        <div class="d-inline-flex title-contact">Контакты:</div>
+                                        <% if (Array.isArray(JSON.parse(topic.contact))) { %>
+                                            <div>
+                                                <% JSON.parse(topic.contact).forEach(item=> { %>
+                                                    <div class="d-inline-flex contact">
+                                                        <%= item %>
+                                                    </div>
+                                                    <% }); %>
+                                                        <% } else { %>
+                                                            <div class="d-inline-flex contact">
+                                                                <%= JSON.parse(topic.contact) %>
+                                                            </div>
+                                                            <% } %>
+                                            </div>
+                                    </div>
+                                    <% } %>
                             </div>
                         </div>
                         <% }); %>

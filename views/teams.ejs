@@ -29,25 +29,6 @@
 <body>
     <style>
         body {
-            height: 100vh;
-            background: #fff;
-            background: url('../img/cloud-bg.png') repeat-x 0 / 90% auto;
-            height: 100px;
-            animation: cloud-bg 60s linear infinite;
-            margin: 0;
-        }
-
-        @keyframes cloud-bg {
-            0% {
-                background-position: 0 -100px;
-            }
-
-            100% {
-                background-position: 100vw -100px;
-            }
-        }
-
-        body {
             background: #fff;
             background: url('../img/cloud-bg.png') repeat-x 0 / 90% auto;
             animation: cloud-bg 60s linear infinite;
@@ -103,26 +84,36 @@
 
         nav .navbar .search {
             height: 50px;
-            background: #fff;
-            box-shadow: 0 0 3px rgba(0, 0, 0, 0.15);
+            background: #f9f9f9;
+            box-shadow: 0 0 1px rgba(0, 0, 0, 0.5);
             border-radius: 10px;
             padding-left: 10px;
             padding-right: 10px;
             margin-top: 22.5px;
-            margin-right: 12px;
+            margin-right: 14px;
             vertical-align: top;
         }
 
         nav .navbar .search input {
-            height: 34px;
-            border: none;
-            font-family: 'TT Norms Pro', sans-serif;
+            min-width: 200px;
+            height: 29.34px;
+            border-radius: 6px 0 0 6px;
+            border: 1.5px solid #e2e2e2;
+            font-family: "Nunito", sans-serif;
+            font-size: 14px;
             vertical-align: top;
-            margin-top: 6px;
+            padding: 0;
+            padding-left: 8px;
+            padding-right: 8px;
+            margin-top: 9px;
         }
 
         nav .navbar .search input:focus {
             outline: none;
+        }
+
+        nav .navbar .search input::placeholder {
+            color: #b6b6b6;
         }
 
         nav .navbar .search button {
@@ -130,10 +121,11 @@
             height: 32px;
             position: relative;
             background: #11B2FF;
-            border-radius: 6px;
+            border-radius: 0 6px 6px 0;
             border: none;
             vertical-align: top;
             margin-top: 9px;
+            margin-left: 4px;
             cursor: pointer;
         }
 
@@ -149,7 +141,6 @@
             width: 150px;
             height: 50px;
             background: linear-gradient(98.44deg, #8DEBFF 0%, #00ABFF 100%), #339DFF;
-            box-shadow: 0px 0px 10px rgba(113, 212, 255, 0.7);
             border-radius: 10px;
             border: none;
             font-size: 19px;
@@ -615,7 +606,7 @@
                     <div>
                         <div class="d-none d-lg-inline-flex search">
                             <form>
-                                <input name="search" type="text" placeholder="Мини-игры..">
+                                <input name="search" type="text" placeholder="Мини-игры">
                                 <button><i class="fa-solid fa-magnifying-glass"></i></button>
                             </form>
                         </div>
@@ -654,7 +645,8 @@
 
                         <% topics.forEach(topic=> { %>
 
-                            <div class="topic <% if (topic.status) { %>topic-close<% } %>" onclick="window.location = '/teams/topic/<%= topic.identifier %>';">
+                            <div class="topic <% if (topic.status) { %>topic-close<% } %>"
+                                onclick="window.location = '/teams/topic/<%= topic.identifier %>';">
                                 <div class="d-inline-flex avatar">
                                     <% if (topic.type==1) { %>
                                         <i class="fa-solid fa-users-medical"></i>
@@ -682,8 +674,7 @@
                                         <% } %>
 
                                             <div class="user">
-                                                <img
-                                                    src="https://mc-heads.net/avatar/<%= topic.skin %>">
+                                                <img src="https://mc-heads.net/avatar/<%= topic.skin %>">
                                                 <div class="d-inline-flex flex-column username-time">
                                                     <div class="d-inline-flex username">
                                                         <%= topic.username %>
