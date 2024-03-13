@@ -262,6 +262,20 @@ app.post('/account/skin', isAuthenticated, (req, res) => {
     });
 });
 
+app.get('/account/:topic/:id/up', isAuthenticated, (req, res) => {
+    const topic = req.params.topic;
+    const id = req.params.id;
+
+    pool.query(`UPDATE forum_${topic} SET update = CURRENT_TIMESTAMP WHERE identifier = $1 AND owner = $2;`, [id, req.user.id], (err, result) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).send('Internal Server Error');
+        }
+
+        res.redirect('/account');
+    });
+});
+
 app.get('/account/:topic/:id/open', isAuthenticated, (req, res) => {
     const topic = req.params.topic;
     const id = req.params.id;

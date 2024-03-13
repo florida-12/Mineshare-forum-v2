@@ -380,6 +380,30 @@
             color: #11B2FF;
             font-size: 22px;
         }
+        .topic .up {
+            width: 50px;
+            height: 50px;
+            position: relative;
+            background: #fff;
+            border: 1.5px solid #ededed;
+            border-radius: 4px;
+            float: right;
+            margin-left: 7px;
+            transition: 0.2s;
+        }
+
+        .topic .up:hover {
+            border: 1.5px solid #11B2FF;
+        }
+
+        .topic .up i {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #11B2FF;
+            font-size: 25px;
+        }
 
         .panel .avatar {
             position: relative;
@@ -819,12 +843,9 @@
 
                                 <div class="d-none d-sm-inline-flex info"><i class="fa-solid fa-pen-clip"></i></div>
 
-                                <div class="d-none d-sm-inline-flex flex-column counter">
-                                    <div class="records">
-                                        ∞<i class="fa-solid fa-message-lines"></i>
-                                    </div>
-                                    <div class="views">∞<i class="fa-solid fa-eye"></i></div>
-                                </div>
+                                <% if (!topic.status) { %>
+                                <div class="d-none d-sm-inline-flex up" onclick="$('body').css('overflow', 'hidden'); $('.loading').css('display', 'block'); window.location = '/account/teams/<%= topic.identifier %>/up';"><i class="fa-solid fa-up-to-line"></i></div>
+                                <% } %>
                             </div>
                             <% }); %>
                     </div>
