@@ -260,6 +260,10 @@
             user-select: none;
         }
 
+        .topic-close {
+            filter: grayscale(1);
+        }
+
         .line {
             width: 100%;
             height: 2px;
@@ -303,6 +307,10 @@
             font-weight: 700;
             margin-top: -1px;
             margin-bottom: 5px;
+        }
+
+        .topic-close .title {
+            color: #11B2FF;
         }
 
         .topic .subtitle {
@@ -646,7 +654,7 @@
 
                         <% topics.forEach(topic=> { %>
 
-                            <div class="topic" onclick="window.location = '/teams/topic/<%= topic.identifier %>';">
+                            <div class="topic <% if (topic.status) { %>topic-close<% } %>" onclick="window.location = '/teams/topic/<%= topic.identifier %>';">
                                 <div class="d-inline-flex avatar">
                                     <% if (topic.type==1) { %>
                                         <i class="fa-solid fa-users-medical"></i>

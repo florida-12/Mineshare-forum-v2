@@ -599,6 +599,17 @@
             font-size: 18px;
         }
 
+        .loading {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            background: rgba(0, 0, 0, 0.4);
+            overflow: hidden;
+            z-index: 100;
+            display: none;
+        }
+
         .modal {
             display: none;
             position: fixed;
@@ -697,6 +708,8 @@
         }
     </style>
 
+    <div class="loading"></div>
+
     <div id="skin_modal" class="modal">
         <div class="modal-content">
             <div class="modal-box">
@@ -788,7 +801,7 @@
                                                 <% } %>
                                     </div>
                                     <div class="d-inline-flex flex-column title-subtitle"
-                                        onclick="window.location = '/teams';">
+                                        onclick="window.location = '/teams/topic/<%= topic.identifier %>';">
                                         <div class="title">
                                             <%= topic.title %>
                                         </div>
@@ -798,7 +811,11 @@
                                     </div>
                                 </div>
 
-                                <div class="d-none d-sm-inline-flex info"><i class="fa-solid fa-lock-open"></i></div>
+                                <% if (topic.status) { %>
+                                    <div class="d-none d-sm-inline-flex info" onclick="$('body').css('overflow', 'hidden'); $('.loading').css('display', 'block'); window.location = '/account/teams/<%= topic.identifier %>/open';"><i class="fa-solid fa-lock"></i></div>
+                                    <% } else { %>
+                                        <div class="d-none d-sm-inline-flex info" onclick="$('body').css('overflow', 'hidden'); $('.loading').css('display', 'block'); window.location = '/account/teams/<%= topic.identifier %>/close';"><i class="fa-solid fa-lock-open"></i></div>
+                                        <% } %>
 
                                 <div class="d-none d-sm-inline-flex info"><i class="fa-solid fa-pen-clip"></i></div>
 

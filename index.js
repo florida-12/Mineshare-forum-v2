@@ -262,6 +262,34 @@ app.post('/account/skin', isAuthenticated, (req, res) => {
     });
 });
 
+app.get('/account/:topic/:id/open', isAuthenticated, (req, res) => {
+    const topic = req.params.topic;
+    const id = req.params.id;
+
+    pool.query(`UPDATE forum_${topic} SET status = false WHERE identifier = $1 AND owner = $2;`, [id, req.user.id], (err, result) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).send('Internal Server Error');
+        }
+
+        res.redirect('/account');
+    });
+});
+
+app.get('/account/:topic/:id/close', isAuthenticated, (req, res) => {
+    const topic = req.params.topic;
+    const id = req.params.id;
+
+    pool.query(`UPDATE forum_${topic} SET status = true WHERE identifier = $1 AND owner = $2;`, [id, req.user.id], (err, result) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).send('Internal Server Error');
+        }
+
+        res.redirect('/account');
+    });
+});
+
 app.get('/account/confirm/:token', async (req, res) => {
     const token = req.params.token;
     try {
@@ -315,7 +343,7 @@ app.get('/', (req, res) => {
             }
         });
 
-        const teams = await pool.query('SELECT id FROM forum_teams WHERE status = false AND ban = false;');
+        const teams = await pool.query('SELECT id FROM forum_teams WHERE ban = false;');
 
         if (req.user) updateOnlineStatus(req.user.email);
 
@@ -330,7 +358,7 @@ app.get('/login', (req, res) => {
 app.get('/teams', (req, res) => {
     if (!req.path.endsWith('/') && req.path !== '/') return res.redirect(301, req.path + '/');
 
-    pool.query(`SELECT forum_teams.*, users.username, users.skin, users.logdate FROM forum_teams JOIN users ON forum_teams.owner = users.id WHERE forum_teams.status = false AND forum_teams.ban = false ORDER BY update DESC;`, (err, result) => {
+    pool.query(`SELECT forum_teams.*, users.username, users.skin, users.logdate FROM forum_teams JOIN users ON forum_teams.owner = users.id WHERE forum_teams.ban = false ORDER BY update DESC;`, (err, result) => {
         if (err) {
             console.error(err);
             return res.status(500).send('Internal Server Error');
