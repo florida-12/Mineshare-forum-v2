@@ -490,6 +490,11 @@
             font-weight: 400;
         }
 
+        .card .form-description .image {
+            max-width: 100%;
+            max-height: 500px;
+        }
+
         .card .form-contact {
             background: #fff;
             box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.05);
@@ -738,7 +743,7 @@
 
             $('#test_title').text($('#title').val());
             $('#test_version').text($('#version').val());
-            $('#test_description').html($('#description').val().replace(/\n/g, "<br>"));
+            $('#test_description').html($('#description').val().replace(/\['(.*?)'\]/, '<img class="image" src="$1">').replace(/\n/g, "<br>"));
 
             $('#test_contact').html('');
             var contacts = Object.values($('[name="contacts"]'));
