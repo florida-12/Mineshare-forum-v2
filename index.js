@@ -337,6 +337,7 @@ app.post('/account/:topic/:id/edit', isAuthenticated, (req, res) => {
     const id = req.params.id;
     let { type, title, version, description, contacts } = req.body;
 
+    if (typeof contacts == 'string') contacts = [contacts];
     const filteredContacts = contacts.filter(contact => {
         for (const key in contact) {
             if (contact.hasOwnProperty(key) && contact[key] !== null && contact[key] !== '') {
@@ -498,7 +499,8 @@ app.get('/teams/add', isAuthenticated, (req, res) => {
 app.post('/teams/add', isAuthenticated, (req, res) => {
     let { type, title, version, description, contacts } = req.body;
     const identifier = uuidv4();
-
+    
+    if (typeof contacts == 'string') contacts = [contacts];
     const filteredContacts = contacts.filter(contact => {
         for (const key in contact) {
             if (contact.hasOwnProperty(key) && contact[key] !== null && contact[key] !== '') {
