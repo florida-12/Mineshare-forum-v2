@@ -235,15 +235,17 @@ function isAuthenticated(req, res, next) {
 app.get('/account', isAuthenticated, (req, res) => {
     if (!req.path.endsWith('/') && req.path !== '/') return res.redirect(301, req.path + '/');
 
-    pool.query(`SELECT * FROM forum_teams WHERE owner = $1;`, [req.user.id], (err, result) => {
+    pool.query(`SELECT * FROM forum_teams WHERE owner = $1;`, [req.user.id], async (err, result) => {
         if (err) {
             console.error(err);
             return res.status(500).send('Internal Server Error');
         }
 
+        const admin_teams = await pool.query('SELECT * FROM forum_teams;');
+
         updateOnlineStatus(req.user.email);
 
-        res.render('account', { user: req.user, teams: result.rows });
+        res.render('account', { user: req.user, teams: result.rows, admin_teams: admin_teams.rows });
     });
 });
 
@@ -307,6 +309,45 @@ app.get('/account/:topic/:id/close', isAuthenticated, (req, res) => {
     const id = req.params.id;
 
     pool.query(`UPDATE forum_${topic} SET status = true WHERE identifier = $1 AND owner = $2;`, [id, req.user.id], (err, result) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).send('Internal Server Error');
+        }
+
+        res.redirect('/account');
+    });
+});
+
+app.get('/account/:topic/:id/edit', isAuthenticated, (req, res) => {
+    const topic = req.params.topic;
+    const id = req.params.id;
+
+    pool.query(`SELECT * FROM forum_${topic} WHERE identifier = $1 AND owner = $2;`, [id, req.user.id], (err, result) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).send('Internal Server Error');
+        }
+
+        res.render('edit-topic-teams', { topics: result.rows });
+    });
+});
+
+app.post('/account/:topic/:id/edit', isAuthenticated, (req, res) => {
+    const topic = req.params.topic;
+    const id = req.params.id;
+    let { type, title, version, description, contacts } = req.body;
+
+    const filteredContacts = contacts.filter(contact => {
+        for (const key in contact) {
+            if (contact.hasOwnProperty(key) && contact[key] !== null && contact[key] !== '') {
+                return true;
+            }
+        }
+        return false;
+    });
+    const contact = JSON.stringify(filteredContacts);
+
+    pool.query(`UPDATE forum_${topic} SET type = $1, title = $2, description = $3, contact = $4, version = $5 WHERE owner = $6 AND identifier = $7;`, [type, title, description, contact, version, req.user.id, id], (err, result) => {
         if (err) {
             console.error(err);
             return res.status(500).send('Internal Server Error');

@@ -203,39 +203,26 @@
             border-radius: 40px;
         }
 
-        .fire-box {
-            position: absolute;
-            top: 50%;
-            left: -46px;
-            transform: translateY(-50%);
-        }
-
-        .fire {
-            width: 30px;
-            height: 30px;
+        .admin-title {
             position: relative;
-            background: #ff7400;
-            border-radius: 6px;
+            color: rgb(198, 198, 198);
+            font-family: 'TT Norms Pro', sans-serif;
+            font-size: 26px;
+            font-weight: 500;
+            margin-top: -5px;
+            margin-left: 5px;
+            margin-bottom: 20px;
         }
 
-        .fire i {
+        .admin-title::after {
+            content: '';
             position: absolute;
-            top: 27%;
-            left: 30%;
-            color: #fff;
-            font-size: 14px;
-        }
-
-        .tip {
-            width: 0;
-            height: 0;
-            position: absolute;
-            top: 50%;
-            left: 100%;
-            transform: translateY(-50%);
-            border-top: 5px solid transparent;
-            border-bottom: 5px solid transparent;
-            border-left: 6px solid #ff7400;
+            top: 55%;
+            left: 250px;
+            width: calc(100% - 250px);
+            height: 2px;
+            background: rgb(202, 202, 202);
+            border-radius: 40px;
         }
 
         .topic {
@@ -267,6 +254,10 @@
 
         .topic:hover .title {
             text-decoration: underline;
+        }
+
+        .topic:hover .ban {
+            text-decoration: line-through;
         }
 
         .topic .avatar {
@@ -310,6 +301,10 @@
             font-weight: 400;
             line-height: 12px;
             overflow: hidden;
+        }
+
+        .topic .ban {
+            text-decoration: line-through;
         }
 
         .topic .counter {
@@ -780,11 +775,12 @@
 
                         <div class="username">
                             <form action="/account/username" method="post">
-                                <input id="username_input" class="d-inline-flex" name="username" value="<%= user.username %>"
-                                    placeholder="Никнейм" maxlength="20">
+                                <input id="username_input" class="d-inline-flex" name="username"
+                                    value="<%= user.username %>" placeholder="Никнейм" maxlength="20">
                                 <div id="username_save" class="save"
                                     onclick="$('body').css('overflow', 'hidden'); $('.loading').css('display', 'block'); $(this).parent().submit();">
-                                    <i class="fa-solid fa-check"></i></div>
+                                    <i class="fa-solid fa-check"></i>
+                                </div>
                             </form>
                         </div>
                     </div>
@@ -817,25 +813,66 @@
                                 <% if (topic.status) { %>
                                     <div class="d-none d-sm-inline-flex info"
                                         onclick="$('body').css('overflow', 'hidden'); $('.loading').css('display', 'block'); window.location = '/account/teams/<%= topic.identifier %>/open';">
-                                        <i class="fa-solid fa-lock"></i></div>
+                                        <i class="fa-solid fa-lock"></i>
+                                    </div>
                                     <% } else { %>
                                         <div class="d-none d-sm-inline-flex info"
                                             onclick="$('body').css('overflow', 'hidden'); $('.loading').css('display', 'block'); window.location = '/account/teams/<%= topic.identifier %>/close';">
-                                            <i class="fa-solid fa-lock-open"></i></div>
+                                            <i class="fa-solid fa-lock-open"></i>
+                                        </div>
                                         <% } %>
 
-                                            <div class="d-none d-sm-inline-flex info"><i
+                                            <div class="d-none d-sm-inline-flex info" onclick="window.location = '/account/teams/<%= topic.identifier %>/edit';"><i
                                                     class="fa-solid fa-pen-clip"></i></div>
 
                                             <% if (!topic.status) { %>
                                                 <div class="d-none d-sm-inline-flex up"
                                                     onclick="$('body').css('overflow', 'hidden'); $('.loading').css('display', 'block'); window.location = '/account/teams/<%= topic.identifier %>/up';">
-                                                    <i class="fa-solid fa-up-to-line"></i></div>
+                                                    <i class="fa-solid fa-up-to-line"></i>
+                                                </div>
                                                 <% } %>
                             </div>
                             <% }); %>
                     </div>
                 </div>
+                <% if (user.admin) { %>
+                    <div class="col-12 col-sm-12 col-md-6 col-lg-3"></div>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-9">
+                        <div class="card">
+                            <p class="admin-title">Панель управления</p>
+                            <% admin_teams.forEach(topic=> { %>
+                                <div class="topic">
+                                    <div class="d-inline-flex justify-content-start">
+                                        <div class="d-inline-flex avatar">
+                                            <% if (topic.type==1) { %>
+                                                <i class="fa-solid fa-users-medical"></i>
+                                                <% } else if (topic.type==2) { %>
+                                                    <i class="fa-solid fa-user-plus"></i>
+                                                    <% } %>
+                                        </div>
+                                        <div class="d-inline-flex flex-column title-subtitle"
+                                            onclick="window.location = '/teams/topic/<%= topic.identifier %>';">
+                                            <div class="title <% if (topic.ban) { %>ban<% } %>">
+                                                <%= topic.title %>
+                                            </div>
+                                            <div class="subtitle <% if (topic.ban) { %>ban<% } %>">
+                                                <%= topic.description %>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <% if (topic.ban) { %>
+                                        <div class="d-none d-sm-inline-flex info"><i
+                                                class="fa-solid fa-ban" style="color: #f67468;"></i></div>
+                                        <% } else { %>
+                                            <div class="d-none d-sm-inline-flex info"><i class="fa-solid fa-ban"></i>
+                                            </div>
+                                            <% } %>
+                                </div>
+                                <% }); %>
+                        </div>
+                    </div>
+                    <% } %>
             </div>
         </div>
     </div>
