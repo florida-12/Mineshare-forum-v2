@@ -235,13 +235,13 @@ function isAuthenticated(req, res, next) {
 app.get('/account', isAuthenticated, (req, res) => {
     if (!req.path.endsWith('/') && req.path !== '/') return res.redirect(301, req.path + '/');
 
-    pool.query(`SELECT * FROM forum_teams WHERE owner = $1;`, [req.user.id], async (err, result) => {
+    pool.query(`SELECT * FROM forum_teams WHERE owner = $1 ORDER BY update DESC;`, [req.user.id], async (err, result) => {
         if (err) {
             console.error(err);
             return res.status(500).send('Internal Server Error');
         }
 
-        const admin_teams = await pool.query('SELECT * FROM forum_teams;');
+        const admin_teams = await pool.query('SELECT * FROM forum_teams ORDER BY update DESC;');
 
         updateOnlineStatus(req.user.email);
 
@@ -349,6 +349,38 @@ app.post('/account/:topic/:id/edit', isAuthenticated, (req, res) => {
     const contact = JSON.stringify(filteredContacts);
 
     pool.query(`UPDATE forum_${topic} SET type = $1, title = $2, description = $3, contact = $4, version = $5 WHERE owner = $6 AND identifier = $7;`, [type, title, description, contact, version, req.user.id, id], (err, result) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).send('Internal Server Error');
+        }
+
+        res.redirect('/account');
+    });
+});
+
+app.get('/account/admin/:topic/:id/ban', isAuthenticated, (req, res) => {
+    if (!req.user.admin) return res.redirect('/account');
+
+    const topic = req.params.topic;
+    const id = req.params.id;
+
+    pool.query(`UPDATE forum_${topic} SET ban = true WHERE identifier = $1;`, [id], (err, result) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).send('Internal Server Error');
+        }
+
+        res.redirect('/account');
+    });
+});
+
+app.get('/account/admin/:topic/:id/unban', isAuthenticated, (req, res) => {
+    if (!req.user.admin) return res.redirect('/account');
+
+    const topic = req.params.topic;
+    const id = req.params.id;
+
+    pool.query(`UPDATE forum_${topic} SET ban = false WHERE identifier = $1;`, [id], (err, result) => {
         if (err) {
             console.error(err);
             return res.status(500).send('Internal Server Error');
@@ -496,7 +528,10 @@ app.get('/teams/add', isAuthenticated, (req, res) => {
     res.render('create-topic-teams', { footer: footer_html });
 });
 
-app.post('/teams/add', isAuthenticated, (req, res) => {
+app.post('/teams/add', isAuthenticated, async (req, res) => {
+    const topics_amount = await pool.query(`SELECT * FROM forum_teams WHERE owner = ${req.user.id};`);
+    if (topics_amount.rows.length >= 2) return res.status(500).send('Ваш аккаунт уже содержит 2 темы в данном разделе.');
+
     let { type, title, version, description, contacts } = req.body;
     const identifier = uuidv4();
     

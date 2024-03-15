@@ -870,20 +870,20 @@
                                         </div>
                                         <div class="d-inline-flex flex-column title-subtitle"
                                             onclick="window.location = '/teams/topic/<%= topic.identifier %>';">
-                                            <div class="title <% if (topic.ban) { %>ban<% } %>">
+                                            <div class="title">
                                                 <%= topic.title %>
                                             </div>
-                                            <div class="subtitle <% if (topic.ban) { %>ban<% } %>">
+                                            <div class="subtitle">
                                                 <%= topic.description %>
                                             </div>
                                         </div>
                                     </div>
 
                                     <% if (topic.ban) { %>
-                                        <div class="d-none d-sm-inline-flex info"><i class="fa-solid fa-ban"
+                                        <div class="d-none d-sm-inline-flex info" onclick="window.location = '/account/admin/teams/<%= topic.identifier %>/unban';"><i class="fa-solid fa-ban"
                                                 style="color: #f67468;"></i></div>
                                         <% } else { %>
-                                            <div class="d-none d-sm-inline-flex info"><i class="fa-solid fa-ban"></i>
+                                            <div class="d-none d-sm-inline-flex info" onclick="window.location = '/account/admin/teams/<%= topic.identifier %>/ban';"><i class="fa-solid fa-ban"></i>
                                             </div>
                                             <% } %>
                                 </div>
