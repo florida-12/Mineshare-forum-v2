@@ -269,6 +269,10 @@
             margin-right: 14px;
         }
 
+        .topic .avatar-ban {
+            background: #f67468;
+        }
+
         .topic .avatar i {
             position: absolute;
             top: 50%;
@@ -792,45 +796,59 @@
                         <% teams.forEach(topic=> { %>
                             <div class="topic">
                                 <div class="d-inline-flex justify-content-start">
-                                    <div class="d-inline-flex avatar">
-                                        <% if (topic.type==1) { %>
-                                            <i class="fa-solid fa-users-medical"></i>
-                                            <% } else if (topic.type==2) { %>
-                                                <i class="fa-solid fa-user-plus"></i>
-                                                <% } %>
-                                    </div>
-                                    <div class="d-inline-flex flex-column title-subtitle"
-                                        onclick="window.location = '/teams/topic/<%= topic.identifier %>';">
-                                        <div class="title">
-                                            <%= topic.title %>
+                                    <% if (topic.ban) { %>
+                                        <div class="d-inline-flex avatar avatar-ban">
+                                            <i class="fa-solid fa-ban"></i>
                                         </div>
-                                        <div class="subtitle">
-                                            <%= topic.description %>
-                                        </div>
-                                    </div>
+                                        <% } else { %>
+                                            <div class="d-inline-flex avatar">
+                                                <% if (topic.type==1) { %>
+                                                    <i class="fa-solid fa-users-medical"></i>
+                                                    <% } else if (topic.type==2) { %>
+                                                        <i class="fa-solid fa-user-plus"></i>
+                                                        <% } %>
+                                            </div>
+                                            <% } %>
+                                                <div class="d-inline-flex flex-column title-subtitle"
+                                                    onclick="window.location = '/teams/topic/<%= topic.identifier %>';">
+                                                    <div class="title <% if (topic.ban) { %>ban<% } %>">
+                                                        <%= topic.title %>
+                                                    </div>
+                                                    <div class="subtitle <% if (topic.ban) { %>ban<% } %>">
+                                                        <%= topic.description %>
+                                                    </div>
+                                                </div>
                                 </div>
 
-                                <% if (topic.status) { %>
-                                    <div class="d-none d-sm-inline-flex info"
-                                        onclick="$('body').css('overflow', 'hidden'); $('.loading').css('display', 'block'); window.location = '/account/teams/<%= topic.identifier %>/open';">
-                                        <i class="fa-solid fa-lock"></i>
-                                    </div>
-                                    <% } else { %>
+                                <% if (!topic.ban) { %>
+                                    <% if (topic.status) { %>
                                         <div class="d-none d-sm-inline-flex info"
-                                            onclick="$('body').css('overflow', 'hidden'); $('.loading').css('display', 'block'); window.location = '/account/teams/<%= topic.identifier %>/close';">
-                                            <i class="fa-solid fa-lock-open"></i>
+                                            onclick="$('body').css('overflow', 'hidden'); $('.loading').css('display', 'block'); window.location = '/account/teams/<%= topic.identifier %>/open';">
+                                            <i class="fa-solid fa-lock"></i>
                                         </div>
-                                        <% } %>
+                                        <% } else { %>
+                                            <div class="d-none d-sm-inline-flex info"
+                                                onclick="$('body').css('overflow', 'hidden'); $('.loading').css('display', 'block'); window.location = '/account/teams/<%= topic.identifier %>/close';">
+                                                <i class="fa-solid fa-lock-open"></i>
+                                            </div>
+                                            <% } %>
 
-                                            <div class="d-none d-sm-inline-flex info" onclick="window.location = '/account/teams/<%= topic.identifier %>/edit';"><i
-                                                    class="fa-solid fa-pen-clip"></i></div>
-
-                                            <% if (!topic.status) { %>
-                                                <div class="d-none d-sm-inline-flex up"
-                                                    onclick="$('body').css('overflow', 'hidden'); $('.loading').css('display', 'block'); window.location = '/account/teams/<%= topic.identifier %>/up';">
-                                                    <i class="fa-solid fa-up-to-line"></i>
+                                                <div class="d-none d-sm-inline-flex info"
+                                                    onclick="window.location = '/account/teams/<%= topic.identifier %>/edit';">
+                                                    <i class="fa-solid fa-pen-clip"></i>
                                                 </div>
-                                                <% } %>
+
+                                                <% if (!topic.status) { %>
+                                                    <div class="d-none d-sm-inline-flex up"
+                                                        onclick="$('body').css('overflow', 'hidden'); $('.loading').css('display', 'block'); window.location = '/account/teams/<%= topic.identifier %>/up';">
+                                                        <i class="fa-solid fa-up-to-line"></i>
+                                                    </div>
+                                                    <% } %>
+                                                        <% } else { %>
+                                                            <div class="d-none d-sm-inline-flex info">
+                                                                <i class="fa-solid fa-circle-question"></i>
+                                                            </div>
+                                                            <% } %>
                             </div>
                             <% }); %>
                     </div>
@@ -862,8 +880,8 @@
                                     </div>
 
                                     <% if (topic.ban) { %>
-                                        <div class="d-none d-sm-inline-flex info"><i
-                                                class="fa-solid fa-ban" style="color: #f67468;"></i></div>
+                                        <div class="d-none d-sm-inline-flex info"><i class="fa-solid fa-ban"
+                                                style="color: #f67468;"></i></div>
                                         <% } else { %>
                                             <div class="d-none d-sm-inline-flex info"><i class="fa-solid fa-ban"></i>
                                             </div>
