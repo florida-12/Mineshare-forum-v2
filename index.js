@@ -250,21 +250,17 @@ function isAuthenticated(req, res, next) {
     res.redirect('/login');
 }
 
-app.get('/account', isAuthenticated, (req, res) => {
+app.get('/account', isAuthenticated, async (req, res) => {
     if (!req.path.endsWith('/') && req.path !== '/') return res.redirect(301, req.path + '/');
 
-    pool.query(`SELECT * FROM forum_teams WHERE owner = $1 ORDER BY update DESC;`, [req.user.id], async (err, result) => {
-        if (err) {
-            console.error(err);
-            return res.status(500).send('Internal Server Error');
-        }
+    const teams = await pool.query(`SELECT * FROM forum_teams WHERE owner = $1 ORDER BY update DESC;`, [req.user.id]);
+    const creation = await pool.query(`SELECT * FROM forum_creation WHERE owner = $1 ORDER BY update DESC;`, [req.user.id]);
 
-        const admin_teams = await pool.query('SELECT * FROM forum_teams ORDER BY update DESC;');
+    const admin_teams = await pool.query('SELECT * FROM forum_teams ORDER BY update DESC;');
 
-        updateOnlineStatus(req.user.email);
+    updateOnlineStatus(req.user.email);
 
-        res.render('account', { user: req.user, teams: result.rows, admin_teams: admin_teams.rows });
-    });
+    res.render('account', { user: req.user, teams: teams.rows, creation: creation.rows, admin_teams: admin_teams.rows });
 });
 
 app.post('/account/username', isAuthenticated, (req, res) => {
@@ -552,7 +548,7 @@ app.post('/teams/add', isAuthenticated, async (req, res) => {
 
     let { type, title, version, description, contacts } = req.body;
     const identifier = uuidv4();
-    
+
     if (typeof contacts == 'string') contacts = [contacts];
     const filteredContacts = contacts.filter(contact => {
         for (const key in contact) {
