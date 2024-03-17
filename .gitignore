@@ -1,4 +1,5 @@
 node_modules/
+media/
 config/
 backup.js
 .env

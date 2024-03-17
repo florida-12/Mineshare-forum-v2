@@ -66,6 +66,24 @@ app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
 
+const multerParser = bodyParser.text({ type: '/' });
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        if (file.fieldname === 'creation') {
+            cb(null, 'media/creation/');
+        } else if (file.fieldname === 'illustrations') {
+            cb(null, 'media/illustrations/');
+        } else {
+            cb(null, 'media/');
+        }
+    },
+    filename: function (req, file, cb) {
+        const ext = path.extname(file.originalname);
+        const filename = uuidv4() + ext;
+        cb(null, filename);
+    }
+});
+const upload = multer({ storage: storage });
 
 let footer_html;
 
@@ -593,6 +611,118 @@ app.get('/manuals', (req, res) => {
 
 app.get('/manuals/add', isAuthenticated, (req, res) => {
     res.render('create-topic-manuals', { footer: footer_html });
+});
+
+app.get('/creation', (req, res) => {
+    if (!req.path.endsWith('/') && req.path !== '/') return res.redirect(301, req.path + '/');
+
+    pool.query(`SELECT forum_creation.*, users.username, users.skin, users.logdate FROM forum_creation JOIN users ON forum_creation.owner = users.id WHERE forum_creation.ban = false ORDER BY update DESC;`, (err, result) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).send('Internal Server Error');
+        }
+
+        result.rows.forEach(row => {
+            const yourDateTime = new Date(row.logdate);
+            yourDateTime.setHours(yourDateTime.getHours() - 2);
+
+            const currentDateTime = new Date();
+
+            const differenceInMilliseconds = yourDateTime - currentDateTime;
+
+            const diffInMinutes = Math.abs(Math.floor(differenceInMilliseconds / (1000 * 60)));
+
+            if (diffInMinutes < 60) {
+                row.lastOnline = `${diffInMinutes} ${pluralize(diffInMinutes, 'минуту', 'минуты', 'минут')} назад`;
+            } else {
+                const diffInHours = Math.floor(diffInMinutes / 60);
+                row.lastOnline = `${diffInHours} ${pluralize(diffInHours, 'час', 'часа', 'часов')} назад`;
+            }
+        });
+
+        result.rows.forEach(row => {
+            const yourDateTime = new Date(row.update);
+            yourDateTime.setHours(yourDateTime.getHours() - 2);
+
+            const currentDateTime = new Date();
+
+            const differenceInMilliseconds = yourDateTime - currentDateTime;
+
+            const diffInMinutes = Math.abs(Math.floor(differenceInMilliseconds / (1000 * 60)));
+
+            if (diffInMinutes < 60) {
+                row.update = `${diffInMinutes} ${pluralize(diffInMinutes, 'минуту', 'минуты', 'минут')} назад`;
+            } else {
+                const diffInHours = Math.floor(diffInMinutes / 60);
+                row.update = `${diffInHours} ${pluralize(diffInHours, 'час', 'часа', 'часов')} назад`;
+            }
+        });
+
+        if (req.user) updateOnlineStatus(req.user.email);
+
+        res.render('creation', { user: req.user, topics: result.rows, footer: footer_html });
+    });
+});
+
+app.get('/creation/topic/:id', (req, res) => {
+    if (!req.path.endsWith('/') && req.path !== '/') return res.redirect(301, req.path + '/');
+
+    pool.query(`SELECT forum_creation.*, users.username, users.skin FROM forum_creation JOIN users ON forum_creation.owner = users.id WHERE identifier = $1 LIMIT 1;`, [req.params.id], async (err, result) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).send('Internal Server Error');
+        }
+
+        result.rows.forEach(row => {
+            const pattern = /\['(.*?)'\]/;
+            row.description = row.description.replace(pattern, '<img class="image" src="$1">');
+        });
+
+        const topic_id = result.rows[0].id;
+
+        const pictures = await pool.query('SELECT picture FROM forum_creation_pictures WHERE topic_id = $1;', [topic_id]);
+
+        res.render('topic-creation', { user: req.user, topics: result.rows, pictures: pictures.rows, footer: footer_html });
+    });
+});
+
+app.get('/creation/add', isAuthenticated, (req, res) => {
+    res.render('create-topic-creation', { footer: footer_html });
+});
+
+app.post('/creation/add', isAuthenticated, multerParser, upload.fields([{ name: 'creation', maxCount: 9 }]), async (req, res) => {
+    let { type, title, version, description } = req.body;
+    const identifier = uuidv4();
+
+    pool.query(`INSERT INTO forum_creation (identifier, type, title, description, version, owner) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id;`, [identifier, type, title, description, version, req.user.id], (err, result) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).send('Internal Server Error');
+        }
+
+        const topic_id = result.rows[0].id;
+
+        if (req.files['creation']) {
+            req.files['creation'].forEach(picture => {
+                pool.query(`INSERT INTO forum_creation_pictures (topic_id, picture) VALUES ($1, $2);`, [topic_id, picture.filename], (err, result) => {
+                    if (err) console.error(err);
+                });
+            });
+        }
+
+        res.redirect('/creation');
+    });
+});
+
+app.get('/media/creation/:uuid', async (req, res) => {
+    const imagePath = path.join(__dirname, '/media/creation/', `${req.params.uuid}`);
+
+    try {
+        await fs.access(imagePath);
+        res.sendFile(imagePath);
+    } catch (error) {
+        res.status(404).send('File not found');
+    }
 });
 
 async function sendConfirmationEmail(email, confirmationLink) {
