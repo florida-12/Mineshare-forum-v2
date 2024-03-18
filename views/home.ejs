@@ -10,7 +10,8 @@
     <title>Mineshare | Форум</title>
 
     <meta property="og:title" content="Mineshare | Форум" />
-    <meta property="og:description" content="Форум майнкрафт для поиска игроков, команды, пати. Майнкрафт форум для того, чтобы создать свой сервер майнкрафт." />
+    <meta property="og:description"
+        content="Форум майнкрафт для поиска игроков, команды, пати. Майнкрафт форум для того, чтобы создать свой сервер майнкрафт." />
     <meta property="og:image" content="https://mineshare.top/img/favicon-alt.png" />
     <meta property="og:url" content="https://forum.mineshare.top/" />
     <meta property="og:type" content="website" />
@@ -531,61 +532,6 @@
             margin-bottom: 12px;
         }
 
-        footer {
-            position: relative;
-            background: #fff;
-            box-shadow: 0px -2px 8px rgba(0, 0, 0, 0.08);
-            padding-top: 60px;
-            padding-bottom: 60px;
-            margin-top: 25px;
-        }
-
-        footer .group {
-            color: #3A4E57;
-            font-family: 'TT Norms Pro', sans-serif;
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 15px;
-        }
-
-        footer .link {
-            font-family: "Nunito Sans", sans-serif;
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 15px;
-        }
-
-        footer .link a {
-            color: #808080;
-        }
-
-        footer .link a:hover {
-            color: #11B2FF;
-        }
-
-        footer .discord {
-            width: 40px;
-            height: 40px;
-            position: relative;
-            background: #7289da;
-            border: 2px solid #7289da;
-            border-radius: 8px;
-            cursor: pointer;
-        }
-
-        footer .discord:hover {
-            border: 2px solid #11B2FF;
-        }
-
-        footer .discord i {
-            position: absolute;
-            top: 49%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: #fff;
-            font-size: 18px;
-        }
-
         @media (max-width: 575.98px) {
             nav .navbar {
                 padding-left: 25px;
@@ -698,9 +644,11 @@
                         <div class="topic">
                             <div class="d-inline-flex justify-content-start">
                                 <div class="d-inline-flex avatar"><i class="fa-solid fa-cubes"></i></div>
-                                <div class="d-inline-flex flex-column title-subtitle" onclick="window.location = '/creation';">
+                                <div class="d-inline-flex flex-column title-subtitle"
+                                    onclick="window.location = '/creation';">
                                     <div class="title">Кубическое творчество</div>
-                                    <div class="subtitle">Постройки от пользователей нашего форума в различных стилях, которые можно оценить, а также оставить свой комментарий.</div>
+                                    <div class="subtitle">Постройки от пользователей нашего форума в различных стилях,
+                                        которые можно оценить, а также оставить свой комментарий.</div>
                                 </div>
                             </div>
 
@@ -835,72 +783,7 @@
         </div>
     </div>
 
-    <footer>
-        <div class="container">
-            <div class="row">
-                <div class="col-12 d-none d-md-block">
-                    <div class="d-flex justify-content-between">
-                        <div>
-                            <div class="group">Ссылки</div>
-                            <div class="link"><a>Команда разработчиков</a></div>
-                            <div class="link"><a>Подробности проекта</a></div>
-                        </div>
-
-                        <div>
-                            <div class="group">Информация</div>
-                            <div class="link"><a>Условия использования</a></div>
-                            <div class="link"><a>Политика конфиденциальности</a></div>
-                        </div>
-
-                        <div>
-                            <div class="group">Услуги</div>
-                            <div class="link"><a>Партнёрские программы</a></div>
-                            <div class="link"><a>Магазин мониторинга</a></div>
-                        </div>
-
-                        <div>
-                            <div class="group">Помощь</div>
-                            <div class="link"><a>Техническая поддержка</a></div>
-                            <div class="link"><a>Сообщить о нарушении</a></div>
-                        </div>
-
-                        <div>
-                            <div class="discord" onclick="window.open('https://discord.gg/mineshare', '_blank')"><i
-                                    class="fa-brands fa-discord"></i></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-6 d-block d-md-none">
-                    <div style="padding-left: 10px;">
-                        <div class="group">Ссылки</div>
-                        <div class="link"><a>Команда разработчиков</a></div>
-                        <div class="link"><a>Подробности проекта</a></div>
-                    </div>
-                </div>
-                <div class="col-6 d-block d-md-none">
-                    <div style="margin-bottom: 50px;">
-                        <div class="group">Информация</div>
-                        <div class="link"><a>Условия использования</a></div>
-                        <div class="link"><a>Политика конфиденциальности</a></div>
-                    </div>
-                </div>
-                <div class="col-6 d-block d-md-none">
-                    <div style="padding-left: 10px;">
-                        <div class="group">Услуги</div>
-                        <div class="link"><a>Партнёрские программы</a></div>
-                        <div class="link"><a>Магазин мониторинга</a></div>
-                    </div>
-                </div>
-                <div class="col-6 d-block d-md-none">
-                    <div>
-                        <div class="group">Помощь</div>
-                        <div class="link"><a>Техническая поддержка</a></div>
-                        <div class="link"><a>Сообщить о нарушении</a></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </footer>
+    <%- footer %>
 </body>
 
 </html>
