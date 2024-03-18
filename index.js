@@ -458,10 +458,11 @@ app.get('/', (req, res) => {
         });
 
         const teams = await pool.query('SELECT id FROM forum_teams WHERE ban = false;');
+        const creation = await pool.query('SELECT id FROM forum_creation WHERE status = false AND ban = false;');
 
         if (req.user) updateOnlineStatus(req.user.email);
 
-        res.render('home', { user: req.user, moderators: result.rows, teams: teams.rows.length, footer: footer_html });
+        res.render('home', { user: req.user, moderators: result.rows, teams: teams.rows.length, creation: creation.rows.length, footer: footer_html });
     });
 });
 
