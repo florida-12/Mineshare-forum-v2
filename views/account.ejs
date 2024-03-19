@@ -1049,6 +1049,12 @@
                 $('#username_save').css('display', 'none');
             }
         });
+
+        $('#username_input').on('keypress', function(e) {
+            if (e.which == 32){
+                return false;
+            }
+        });
     </script>
 </body>
 
