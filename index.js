@@ -18,6 +18,9 @@ const multer = require('multer');
 const bcrypt = require('bcrypt');
 const axios = require('axios');
 const moment = require('moment-timezone');
+const { SitemapStream, streamToPromise } = require('sitemap');
+const { createGzip } = require('zlib');
+const { Readable } = require('stream');
 const app = express();
 
 
@@ -85,6 +88,7 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 
+let sitemap;
 let footer_html;
 
 fs.readFile(path.join(__dirname, 'views/footer.ejs'), 'utf-8')
@@ -721,6 +725,50 @@ app.get('/media/creation/:uuid', async (req, res) => {
         res.status(404).send('File not found');
     }
 });
+
+app.get('/sitemap.xml', async function (req, res) {
+    res.header('Content-Type', 'application/xml');
+    res.header('Content-Encoding', 'gzip');
+    // if we have a cached entry send it
+    if (sitemap) {
+        return res.send(sitemap);
+    }
+
+    const currentDate = new Date().toISOString();
+
+    try {
+        const smStream = new SitemapStream({ hostname: 'https://forum.mineshare.top' });
+        const pipeline = smStream.pipe(createGzip());
+
+        smStream.write({
+            url: '/', lastmod: currentDate, changefreq: 'daily', priority: 1, img: [{ url: 'https://forum.mineshare.top/img/home-picture.gif', caption: 'Mineshare | Форум' }]
+        });
+        smStream.write({ url: '/teams', lastmod: currentDate, changefreq: 'daily', priority: 0.9 });
+        smStream.write({ url: '/manuals', lastmod: currentDate, changefreq: 'daily', priority: 0.9 });
+        smStream.write({ url: '/creation', lastmod: currentDate, changefreq: 'daily', priority: 0.9 });
+        smStream.write({ url: '/login', lastmod: currentDate, changefreq: 'daily', priority: 0.9 });
+
+        const teams = await pool.query(`SELECT identifier FROM forum_teams WHERE ban = false ORDER BY id;`);
+        teams.rows.forEach(row => {
+            smStream.write({ url: `/teams/topic/${row.identifier}`, lastmod: currentDate, changefreq: 'weekly', priority: 0.8 });
+        });
+
+        const creation = await pool.query(`SELECT identifier FROM forum_creation WHERE ban = false ORDER BY id;`);
+        creation.rows.forEach(row => {
+            smStream.write({ url: `/creation/topic/${row.identifier}`, lastmod: currentDate, changefreq: 'weekly', priority: 0.8 });
+        });
+
+        // cache the response
+        streamToPromise(pipeline).then(sm => sitemap = sm);
+        // make sure to attach a write stream such as streamToPromise before ending
+        smStream.end();
+        // stream write the response
+        pipeline.pipe(res).on('error', (e) => { throw e });
+    } catch (e) {
+        console.error(e);
+        res.status(500).end();
+    }
+})
 
 async function sendConfirmationEmail(email, confirmationLink) {
     const transporter = nodemailer.createTransport({
