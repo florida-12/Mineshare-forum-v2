@@ -645,7 +645,7 @@
 
                         <% topics.forEach(topic=> { %>
 
-                            <div class="topic <% if (topic.status) { %>topic-close<% } %>"
+                            <div class="topic"
                                 onclick="window.location = '/creation/topic/<%= topic.identifier %>';">
                                 <div class="d-inline-flex avatar">
                                     <% if (topic.type==1) { %>

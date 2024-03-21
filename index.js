@@ -617,7 +617,7 @@ app.get('/manuals/add', isAuthenticated, (req, res) => {
 app.get('/creation', (req, res) => {
     if (!req.path.endsWith('/') && req.path !== '/') return res.redirect(301, req.path + '/');
 
-    pool.query(`SELECT forum_creation.*, users.username, users.skin, users.logdate FROM forum_creation JOIN users ON forum_creation.owner = users.id WHERE forum_creation.ban = false ORDER BY update DESC;`, (err, result) => {
+    pool.query(`SELECT forum_creation.*, users.username, users.skin, users.logdate FROM forum_creation JOIN users ON forum_creation.owner = users.id WHERE forum_creation.ban = false AND forum_creation.status = false ORDER BY update DESC;`, (err, result) => {
         if (err) {
             console.error(err);
             return res.status(500).send('Internal Server Error');
