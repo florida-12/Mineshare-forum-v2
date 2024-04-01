@@ -485,7 +485,7 @@ app.get('/teams', (req, res) => {
 
         result.rows.forEach(row => {
             const yourDateTime = new Date(row.logdate);
-            yourDateTime.setHours(yourDateTime.getHours() - 2);
+            yourDateTime.setHours(yourDateTime.getHours() - 1);
 
             const currentDateTime = new Date();
 
@@ -503,7 +503,7 @@ app.get('/teams', (req, res) => {
 
         result.rows.forEach(row => {
             const yourDateTime = new Date(row.update);
-            yourDateTime.setHours(yourDateTime.getHours() - 2);
+            yourDateTime.setHours(yourDateTime.getHours() - 1);
 
             const currentDateTime = new Date();
 
@@ -608,7 +608,7 @@ app.get('/manuals', (req, res) => {
             row.update = moment.tz(row.update, 'Europe/Moscow').locale('ru').format('D MMM HH:mm');
 
             const yourDateTime = new Date(row.logdate);
-            yourDateTime.setHours(yourDateTime.getHours() - 2);
+            yourDateTime.setHours(yourDateTime.getHours() - 1);
 
             const currentDateTime = new Date();
 
@@ -645,7 +645,7 @@ app.get('/creation', (req, res) => {
 
         result.rows.forEach(row => {
             const yourDateTime = new Date(row.logdate);
-            yourDateTime.setHours(yourDateTime.getHours() - 2);
+            yourDateTime.setHours(yourDateTime.getHours() - 1);
 
             const currentDateTime = new Date();
 
@@ -663,7 +663,7 @@ app.get('/creation', (req, res) => {
 
         result.rows.forEach(row => {
             const yourDateTime = new Date(row.update);
-            yourDateTime.setHours(yourDateTime.getHours() - 2);
+            yourDateTime.setHours(yourDateTime.getHours() - 1);
 
             const currentDateTime = new Date();
 
