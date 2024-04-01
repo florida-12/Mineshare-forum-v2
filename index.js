@@ -674,6 +674,10 @@ app.get('/creation/topic/:id', (req, res) => {
             return res.status(500).send('Internal Server Error');
         }
 
+        if (result.rows.length == 0) {
+            return res.redirect('/creation');
+        }
+
         result.rows.forEach(row => {
             const pattern = /\['(.*?)'\]/;
             row.description = row.description.replace(pattern, '<img class="image" src="$1">');
@@ -683,7 +687,23 @@ app.get('/creation/topic/:id', (req, res) => {
 
         const pictures = await pool.query('SELECT picture FROM forum_creation_pictures WHERE topic_id = $1;', [topic_id]);
 
-        res.render('topic-creation', { user: req.user, topics: result.rows, pictures: pictures.rows, footer: footer_html });
+        const comments = await pool.query(`SELECT sc.user_id, u.username, u.skin, u.moder, u.admin, sc.message, sc.date FROM forum_creation_comments sc JOIN users u ON sc.user_id = u.id WHERE sc.topic_id = $1 ORDER BY sc.date DESC;`, [topic_id]);
+
+        res.render('topic-creation', { user: req.user, topics: result.rows, pictures: pictures.rows, comments: comments.rows, footer: footer_html });
+    });
+});
+
+app.post('/creation/topic/:id/comment/add', (req, res) => {
+    const { message } = req.body;
+    pool.query(`SELECT * FROM forum_creation WHERE identifier = $1 LIMIT 1;`, [req.params.id], async (err, result) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).send('Internal Server Error');
+        }
+
+        const comment = await pool.query('INSERT INTO forum_creation_comments (topic_id, user_id, message) VALUES ($1, $2, $3);', [result.rows[0].id, req.user.id, message]);
+
+        res.redirect(`/creation/topic/${req.params.id}/`);
     });
 });
 
