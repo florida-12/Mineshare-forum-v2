@@ -528,18 +528,38 @@ app.get('/teams', (req, res) => {
 app.get('/teams/topic/:id', (req, res) => {
     if (!req.path.endsWith('/') && req.path !== '/') return res.redirect(301, req.path + '/');
 
-    pool.query(`SELECT forum_teams.*, users.username, users.skin FROM forum_teams JOIN users ON forum_teams.owner = users.id WHERE identifier = $1 LIMIT 1;`, [req.params.id], (err, result) => {
+    pool.query(`SELECT forum_teams.*, users.username, users.skin FROM forum_teams JOIN users ON forum_teams.owner = users.id WHERE identifier = $1 LIMIT 1;`, [req.params.id], async (err, result) => {
         if (err) {
             console.error(err);
             return res.status(500).send('Internal Server Error');
         }
+
+        if (result.rows.length == 0) return res.redirect('/creation');
 
         result.rows.forEach(row => {
             const pattern = /\['(.*?)'\]/;
             row.description = row.description.replace(pattern, '<img class="image" src="$1">');
         });
 
-        res.render('topic-teams', { user: req.user, topics: result.rows, footer: footer_html });
+        const topic_id = result.rows[0].id;
+
+        const comments = await pool.query(`SELECT sc.user_id, u.username, u.skin, u.moder, u.admin, sc.message, sc.date FROM forum_teams_comments sc JOIN users u ON sc.user_id = u.id WHERE sc.topic_id = $1 ORDER BY sc.date DESC;`, [topic_id]);
+
+        res.render('topic-teams', { user: req.user, topics: result.rows, comments: comments.rows, footer: footer_html });
+    });
+});
+
+app.post('/teams/topic/:id/comment/add', (req, res) => {
+    const { message } = req.body;
+    pool.query(`SELECT * FROM forum_teams WHERE identifier = $1 LIMIT 1;`, [req.params.id], async (err, result) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).send('Internal Server Error');
+        }
+
+        const comment = await pool.query('INSERT INTO forum_teams_comments (topic_id, user_id, message) VALUES ($1, $2, $3);', [result.rows[0].id, req.user.id, message]);
+
+        res.redirect(`/teams/topic/${req.params.id}/`);
     });
 });
 
