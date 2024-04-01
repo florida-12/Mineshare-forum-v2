@@ -444,7 +444,7 @@ app.get('/', (req, res) => {
 
         result.rows.forEach(row => {
             const yourDateTime = new Date(row.logdate);
-            yourDateTime.setHours(yourDateTime.getHours() - 2);
+            yourDateTime.setHours(yourDateTime.getHours() - 3);
 
             const currentDateTime = new Date();
 
