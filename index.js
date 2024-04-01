@@ -549,7 +549,7 @@ app.get('/teams/topic/:id', (req, res) => {
     });
 });
 
-app.post('/teams/topic/:id/comment/add', (req, res) => {
+app.post('/teams/topic/:id/comment/add', isAuthenticated, (req, res) => {
     const { message } = req.body;
     pool.query(`SELECT * FROM forum_teams WHERE identifier = $1 LIMIT 1;`, [req.params.id], async (err, result) => {
         if (err) {
@@ -713,7 +713,7 @@ app.get('/creation/topic/:id', (req, res) => {
     });
 });
 
-app.post('/creation/topic/:id/comment/add', (req, res) => {
+app.post('/creation/topic/:id/comment/add', isAuthenticated, (req, res) => {
     const { message } = req.body;
     pool.query(`SELECT * FROM forum_creation WHERE identifier = $1 LIMIT 1;`, [req.params.id], async (err, result) => {
         if (err) {
