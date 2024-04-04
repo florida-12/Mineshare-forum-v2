@@ -715,6 +715,9 @@ app.get('/creation/topic/:id', (req, res) => {
 
 app.post('/creation/topic/:id/comment/add', isAuthenticated, (req, res) => {
     const { message } = req.body;
+
+    if (!message) return res.redirect(`/creation/topic/${req.params.id}/`);
+
     pool.query(`SELECT * FROM forum_creation WHERE identifier = $1 LIMIT 1;`, [req.params.id], async (err, result) => {
         if (err) {
             console.error(err);
