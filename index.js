@@ -455,9 +455,12 @@ app.get('/', (req, res) => {
 
             if (diffInMinutes < 60) {
                 row.last_online = `${diffInMinutes} ${pluralize(diffInMinutes, 'минуту', 'минуты', 'минут')} назад`;
-            } else {
+            } else if (diffInMinutes < 1440) {
                 const diffInHours = Math.floor(diffInMinutes / 60);
                 row.last_online = `${diffInHours} ${pluralize(diffInHours, 'час', 'часа', 'часов')} назад`;
+            } else {
+                const diffInDays = Math.floor(diffInMinutes / 1440);
+                row.last_online = `${diffInDays} ${pluralize(diffInDays, 'день', 'дня', 'дней')} назад`;
             }
         });
 
@@ -495,9 +498,12 @@ app.get('/teams', (req, res) => {
 
             if (diffInMinutes < 60) {
                 row.lastOnline = `${diffInMinutes} ${pluralize(diffInMinutes, 'минуту', 'минуты', 'минут')} назад`;
-            } else {
+            } else if (diffInMinutes < 1440) {
                 const diffInHours = Math.floor(diffInMinutes / 60);
                 row.lastOnline = `${diffInHours} ${pluralize(diffInHours, 'час', 'часа', 'часов')} назад`;
+            } else {
+                const diffInDays = Math.floor(diffInMinutes / 1440);
+                row.lastOnline = `${diffInDays} ${pluralize(diffInDays, 'день', 'дня', 'дней')} назад`;
             }
         });
 
@@ -513,9 +519,12 @@ app.get('/teams', (req, res) => {
 
             if (diffInMinutes < 60) {
                 row.update = `${diffInMinutes} ${pluralize(diffInMinutes, 'минуту', 'минуты', 'минут')} назад`;
-            } else {
+            } else if (diffInMinutes < 1440) {
                 const diffInHours = Math.floor(diffInMinutes / 60);
                 row.update = `${diffInHours} ${pluralize(diffInHours, 'час', 'часа', 'часов')} назад`;
+            } else {
+                const diffInDays = Math.floor(diffInMinutes / 1440);
+                row.update = `${diffInDays} ${pluralize(diffInDays, 'день', 'дня', 'дней')} назад`;
             }
         });
 
@@ -655,9 +664,12 @@ app.get('/creation', (req, res) => {
 
             if (diffInMinutes < 60) {
                 row.lastOnline = `${diffInMinutes} ${pluralize(diffInMinutes, 'минуту', 'минуты', 'минут')} назад`;
-            } else {
+            } else if (diffInMinutes < 1440) {
                 const diffInHours = Math.floor(diffInMinutes / 60);
                 row.lastOnline = `${diffInHours} ${pluralize(diffInHours, 'час', 'часа', 'часов')} назад`;
+            } else {
+                const diffInDays = Math.floor(diffInMinutes / 1440);
+                row.lastOnline = `${diffInDays} ${pluralize(diffInDays, 'день', 'дня', 'дней')} назад`;
             }
         });
 
@@ -673,9 +685,12 @@ app.get('/creation', (req, res) => {
 
             if (diffInMinutes < 60) {
                 row.update = `${diffInMinutes} ${pluralize(diffInMinutes, 'минуту', 'минуты', 'минут')} назад`;
-            } else {
+            } else if (diffInMinutes < 1440) {
                 const diffInHours = Math.floor(diffInMinutes / 60);
                 row.update = `${diffInHours} ${pluralize(diffInHours, 'час', 'часа', 'часов')} назад`;
+            } else {
+                const diffInDays = Math.floor(diffInMinutes / 1440);
+                row.update = `${diffInDays} ${pluralize(diffInDays, 'день', 'дня', 'дней')} назад`;
             }
         });
 
