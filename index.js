@@ -787,7 +787,7 @@ app.get('/media/creation/:uuid', async (req, res) => {
 app.get('/sitemap.xml', async function (req, res) {
     res.header('Content-Type', 'application/xml');
     res.header('Content-Encoding', 'gzip');
-    // if we have a cached entry send it
+
     if (sitemap) {
         return res.send(sitemap);
     }
@@ -850,16 +850,13 @@ async function sendConfirmationEmail(email, confirmationLink) {
 
 async function startServer() {
     try {
-        // Загрузка закрытого ключа и сертификата
         const privateKey = await fs.readFile('config/private.key', 'utf8');
         const certificate = await fs.readFile('config/certificate.crt', 'utf8');
 
         const credentials = { key: privateKey, cert: certificate };
 
-        // Создание HTTPS-сервера
         const httpsServer = https.createServer(credentials, app);
 
-        // Прослушивание порта
         httpsServer.listen(443, () => {
             console.log(`\n--------------- RUNNING ---------------`);
             console.log(`${new Date()}`);
