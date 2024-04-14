@@ -10,8 +10,7 @@
     <title>Mineshare | Форум</title>
 
     <meta property="og:title" content="Mineshare | Форум" />
-    <meta property="og:description"
-        content="<%= topics[0].title %>" />
+    <meta property="og:description" content="<%= topics[0].title %>" />
     <meta property="og:image" content="https://mineshare.top/img/favicon-alt.png" />
     <meta property="og:url" content="https://forum.mineshare.top/teams/topic/<%= topics[0].identifier %>/" />
     <meta property="og:type" content="website" />
@@ -423,6 +422,47 @@
             right: 100%;
         }
 
+        .row-complaint {
+            margin-left: 20px;
+        }
+
+        .card-complaint {
+            background-color: #F3F7FC;
+            border-radius: 12px;
+            padding-top: 15px;
+            padding-bottom: 15px;
+            cursor: pointer;
+        }
+
+        .card-complaint:hover {
+            background: #f67468;
+        }
+
+        .card-complaint .complaint {
+            color: #aeb9be;
+            font-family: 'TT Norms Pro', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            padding-left: 7px;
+            text-transform: uppercase;
+            text-align: center;
+        }
+
+        .card-complaint:hover .complaint {
+            color: #fff;
+        }
+
+        .card-complaint .complaint i {
+            margin-left: 5px;
+        }
+
+        @media (max-width: 991.98px) {
+            .row-complaint {
+                margin-top: 20px;
+                margin-left: 0px;
+            }
+        }
+
         @media (max-width: 575.98px) {
             nav .navbar {
                 padding-left: 25px;
@@ -529,40 +569,51 @@
                         </div>
                         <% }); %>
 
-                        <% if (!topics[0].status) { %>
-                        <div class="card" style="margin-top: 20px;">
-                            <div class="comments">
-                                <div class="form">
-                                    <form action="/teams/topic/<%= topics[0].identifier %>/comment/add" method="post">
-                                        <input name="message" placeholder="Сообщение" maxlength="200" required/>
-                                        <div class="d-flex justify-content-end">
-                                            <button type="submit">Подтвердить</button>
-                                        </div>
-                                    </form>
-                                </div>
-                                <% if (comments.length > 0) { %>        
-                                <div class="line"></div>
-                                <% comments.forEach(comment => { %>
-                                    <div class="comment">
-                                        <div class="d-flex justify-content-start">
-                                            <img class="avatar" src="https://mc-heads.net/avatar/<%= comment.skin %>/100">
-                                            <div class="d-flex flex-column">
-                                                <div class="username"><%= comment.username %></div>
-                                                <div class="text">
-                                                    <%= comment.message %>
-                                                    <div class="arrow"></div>
+                            <% if (!topics[0].status) { %>
+                                <div class="card" style="margin-top: 20px;">
+                                    <div class="comments">
+                                        <div class="form">
+                                            <form action="/teams/topic/<%= topics[0].identifier %>/comment/add"
+                                                method="post">
+                                                <input name="message" placeholder="Сообщение" maxlength="200"
+                                                    required />
+                                                <div class="d-flex justify-content-end">
+                                                    <button type="submit">Подтвердить</button>
                                                 </div>
-                                            </div>
+                                            </form>
                                         </div>
+                                        <% if (comments.length> 0) { %>
+                                            <div class="line"></div>
+                                            <% comments.forEach(comment=> { %>
+                                                <div class="comment">
+                                                    <div class="d-flex justify-content-start">
+                                                        <img class="avatar"
+                                                            src="https://mc-heads.net/avatar/<%= comment.skin %>/100">
+                                                        <div class="d-flex flex-column">
+                                                            <div class="username">
+                                                                <%= comment.username %>
+                                                            </div>
+                                                            <div class="text">
+                                                                <%= comment.message %>
+                                                                    <div class="arrow"></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <% }); %>
+                                                    <% } %>
                                     </div>
-                                <% }); %>
+                                </div>
                                 <% } %>
-                            </div>
-                        </div>
-                        <% } %>
                 </div>
 
-                <div class="col-2"></div>
+                <div class="col-12 col-sm-12 col-md-6 col-lg-2">
+                    <div class="row-complaint">
+                        <div class="card-complaint">
+                            <div class="complaint">Жалоба<i class="fa-solid fa-circle-exclamation"></i></div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
