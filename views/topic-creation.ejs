@@ -25,6 +25,7 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap"
         rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </head>
 
 <body>
@@ -406,58 +407,46 @@
             right: 100%;
         }
 
-        footer {
-            background: #fff;
-            box-shadow: 0px -3px 8px rgba(0, 0, 0, 0.08);
-            padding-top: 40px;
-            padding-bottom: 25px;
-            margin-top: 50px;
+        .row-complaint {
+            margin-left: 20px;
         }
 
-        footer .group {
-            color: #3A4E57;
+        .card-complaint {
+            background-color: #F3F7FC;
+            border-radius: 12px;
+            padding-top: 15px;
+            padding-bottom: 15px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .card-complaint:hover {
+            background: #f67468;
+        }
+
+        .card-complaint .complaint {
+            color: #aeb9be;
             font-family: 'TT Norms Pro', sans-serif;
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 15px;
-        }
-
-        footer .link {
-            font-family: "Nunito Sans", sans-serif;
             font-size: 14px;
             font-weight: 600;
-            margin-bottom: 15px;
+            padding-left: 7px;
+            text-transform: uppercase;
+            text-align: center;
         }
 
-        footer .link a {
-            color: #808080;
-        }
-
-        footer .link a:hover {
-            color: #11B2FF;
-        }
-
-        footer .discord {
-            width: 40px;
-            height: 40px;
-            position: relative;
-            background: #7289da;
-            border: 2px solid #7289da;
-            border-radius: 8px;
-            cursor: pointer;
-        }
-
-        footer .discord:hover {
-            border: 2px solid #11B2FF;
-        }
-
-        footer .discord i {
-            position: absolute;
-            top: 49%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+        .card-complaint:hover .complaint {
             color: #fff;
-            font-size: 18px;
+        }
+
+        .card-complaint .complaint i {
+            margin-left: 5px;
+        }
+
+        @media (max-width: 991.98px) {
+            .row-complaint {
+                margin-top: 20px;
+                margin-left: 0px;
+            }
         }
 
         @media (max-width: 575.98px) {
@@ -519,7 +508,160 @@
             z-index: 1000;
             -webkit-font-smoothing: antialiased
         }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0, 0, 0);
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-content {
+            width: 430px;
+            border-radius: 14px;
+            margin: 15% auto;
+            background-color: #F3F7FC;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+        }
+
+        .modal-box {
+            background-color: #fff;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.05);
+            border-radius: 10px;
+            padding-top: 13px;
+            padding-left: 35px;
+            padding-right: 35px;
+            padding-bottom: 31px;
+        }
+
+        .modal-content .close {
+            color: #b7b7b7;
+            font-size: 18px;
+            margin-right: -21px;
+            margin-bottom: 25px;
+            cursor: pointer;
+        }
+
+        .modal-content .close:hover {
+            color: #949494;
+        }
+
+        .modal-content .reason {
+            width: 100%;
+            background: #fff;
+            border-radius: 6px;
+            border: 2px solid #ebebeb;
+            color: rgb(146, 146, 146);
+            font-family: 'TT Norms Pro', sans-serif;
+            font-size: 15px;
+            padding-top: 10px;
+            padding-left: 12px;
+            padding-right: 12px;
+            padding-bottom: 11px;
+            margin-bottom: 15px;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .modal-content .reason-icon {
+            position: absolute;
+            top: 22%;
+            right: 13px;
+            color: rgb(146, 146, 146);
+        }
+
+        .modal-content .reason:focus {
+            border: 2px solid #11B2FF;
+            outline: none;
+        }
+
+        .modal-content .reason option {
+            color: #3A4E57;
+            font-family: 'TT Norms Pro', sans-serif;
+        }
+
+        .modal-content .details {
+            width: 100%;
+            background: #fff;
+            border-radius: 6px;
+            border: 2px solid #ebebeb;
+            color: #3A4E57;
+            font-family: 'TT Norms Pro', sans-serif;
+            font-size: 15px;
+            padding-top: 10px;
+            padding-left: 12px;
+            padding-right: 12px;
+            padding-bottom: 11px;
+            margin-bottom: 30px;
+        }
+
+        .modal-content .details:focus {
+            border: 2px solid #11B2FF;
+            outline: none;
+        }
+
+        .modal-content .details::placeholder {
+            color: rgb(146, 146, 146);
+        }
+
+        .modal-content button {
+            width: 150px;
+            background: #11B2FF;
+            border: none;
+            border-radius: 6px;
+            color: #fff;
+            font-family: 'TT Norms Pro', sans-serif;
+            font-size: 15px;
+            font-weight: 500;
+            padding-top: 8.5px;
+            padding-bottom: 10px;
+            cursor: pointer;
+        }
+
+        .modal-content button:hover {
+            background: #0E99E6;
+        }
     </style>
+
+    <div id="report_modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-box">
+                <form action="report" method="post">
+                    <div class="d-flex justify-content-end">
+                        <div class="d-inline-flex close" onclick="$('#report_modal').css('display', 'none');"><i
+                                class="fa-solid fa-xmark"></i></div>
+                    </div>
+
+                    <div class="d-flex justify-content-center" style="position: relative;">
+                        <i class="fa-solid fa-caret-down reason-icon"></i>
+                        <select id="reason" class="reason" name="reason" required>
+                            <option value="">Укажите причину жалобы</option>
+                            <option value="1">Спам или ложная информация</option>
+                            <option value="2">Оскорбления или проявления нетерпимости</option>
+                            <option value="3">Контент сексуального характера</option>
+                            <option value="4">Нарушение авторских прав</option>
+                            <option value="5">Пропаганда терроризма</option>
+                        </select>
+                    </div>
+
+                    <div class="d-flex justify-content-center">
+                        <input class="details" name="details" placeholder="Опишите нарушение (не обязательно)">
+                    </div>
+
+                    <div class="d-flex justify-content-center">
+                        <button>Подтвердить</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
     <nav>
         <div class="container">
@@ -620,82 +762,67 @@
                         <div class="comments">
                             <div class="form">
                                 <form action="/creation/topic/<%= topics[0].identifier %>/comment/add" method="post">
-                                    <input name="message" placeholder="Сообщение" maxlength="200" required/>
+                                    <input name="message" placeholder="Сообщение" maxlength="200" required />
                                     <div class="d-flex justify-content-end">
                                         <button type="submit">Подтвердить</button>
                                     </div>
                                 </form>
                             </div>
-                            <% if (comments.length > 0) { %>        
-                            <div class="line"></div>
-                            <% comments.forEach(comment => { %>
-                                <div class="comment">
-                                    <div class="d-flex justify-content-start">
-                                        <img class="avatar" src="https://mc-heads.net/avatar/<%= comment.skin %>/100">
-                                        <div class="d-flex flex-column">
-                                            <div class="username"><%= comment.username %></div>
-                                            <div class="text">
-                                                <%= comment.message %>
-                                                <div class="arrow"></div>
+                            <% if (comments.length> 0) { %>
+                                <div class="line"></div>
+                                <% comments.forEach(comment=> { %>
+                                    <div class="comment">
+                                        <div class="d-flex justify-content-start">
+                                            <img class="avatar"
+                                                src="https://mc-heads.net/avatar/<%= comment.skin %>/100">
+                                            <div class="d-flex flex-column">
+                                                <div class="username">
+                                                    <%= comment.username %>
+                                                </div>
+                                                <div class="text">
+                                                    <%= comment.message %>
+                                                        <div class="arrow"></div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            <% }); %>
-                            <% } %>
+                                    <% }); %>
+                                        <% } %>
                         </div>
                     </div>
                 </div>
-                <div class="col-2"></div>
+                <div class="col-12 col-sm-12 col-md-6 col-lg-2">
+                    <div class="row-complaint" onclick="openReportModal();">
+                        <div class="card-complaint">
+                            <div class="complaint">Жалоба<i class="fa-solid fa-circle-exclamation"></i></div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <footer>
-        <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    <div class="d-flex justify-content-between">
-                        <div>
-                            <div class="group">Ссылки</div>
-                            <div class="link"><a>Команда разработчиков</a></div>
-                            <div class="link"><a>Подробности проекта</a></div>
-                        </div>
+    <%- footer %>
 
-                        <div>
-                            <div class="group">Информация</div>
-                            <div class="link"><a>Условия использования</a></div>
-                            <div class="link"><a>Политика конфиденциальности</a></div>
-                        </div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                var elems = document.querySelectorAll('.materialboxed');
+                var instances = M.Materialbox.init(elems);
+            });
 
-                        <div>
-                            <div class="group">Услуги</div>
-                            <div class="link"><a>Партнёрские программы</a></div>
-                            <div class="link"><a>Магазин мониторинга</a></div>
-                        </div>
+            function openReportModal() {
+                $('#report_modal').css('display', 'block');
+            }
 
-                        <div>
-                            <div class="group">Помощь</div>
-                            <div class="link"><a>Техническая поддержка</a></div>
-                            <div class="link"><a>Сообщить о нарушении</a></div>
-                        </div>
-
-                        <div>
-                            <div class="discord" onclick="window.open('https://discord.gg/mineshare', '_blank')"><i
-                                    class="fa-brands fa-discord"></i></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-    </footer>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            var elems = document.querySelectorAll('.materialboxed');
-            var instances = M.Materialbox.init(elems);
-        });
-    </script>
+            $('#reason').on('change', function () {
+                if ($('#reason').find(":selected").val() != '') {
+                    $('#reason').css('color', '#3A4E57');
+                } else {
+                    $('#reason').css('color', 'rgb(146, 146, 146)');
+                }
+            });
+        </script>
 </body>
 
 </html>
