@@ -743,6 +743,21 @@ app.get('/creation/topic/:id', (req, res) => {
     });
 });
 
+app.post('/creation/topic/:id/report', isAuthenticated, (req, res) => {
+    const { reason, details } = req.body;
+    
+    if (reason < 1 || reason > 5) return res.redirect(`/teams/topic/${req.params.id}/`);
+
+    pool.query(`INSERT INTO forum_reports (topic, topic_id, user_id, reason, details) VALUES ('creation', $1, $2, $3, $4);`, [req.params.id, req.user.id, reason, details], async (err, result) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).send('Internal Server Error');
+        }
+
+        res.redirect(`/creation/topic/${req.params.id}/`);
+    });
+});
+
 app.post('/creation/topic/:id/comment/add', isAuthenticated, (req, res) => {
     const { message } = req.body;
 
