@@ -204,14 +204,17 @@
         }
 
         .admin-title {
+            width: calc(100% - 179px);
             position: relative;
             color: rgb(198, 198, 198);
             font-family: 'TT Norms Pro', sans-serif;
             font-size: 26px;
             font-weight: 500;
-            margin-top: -5px;
+            margin-top: 0;
             margin-left: 5px;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
+            display: inline-flex;
+            vertical-align: bottom;
         }
 
         .admin-title::after {
@@ -223,6 +226,35 @@
             height: 2px;
             background: rgb(202, 202, 202);
             border-radius: 40px;
+        }
+
+        .admin-panel {
+            margin-top: -4px;
+            vertical-align: top;
+        }
+
+        .admin-panel .button {
+            width: 40px;
+            height: 40px;
+            position: relative;
+            background: #fff;
+            border: 1.5px solid #ededed;
+            border-radius: 8px;
+            margin-left: 15px;
+            cursor: pointer;
+        }
+
+        .admin-panel .button:hover {
+            border: 1.5px solid #11B2FF;
+        }
+
+        .admin-panel .button i {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #3A4E57;
+            font-size: 15px;
         }
 
         .topic {
@@ -922,42 +954,112 @@
                 <% if (user.admin) { %>
                     <div class="col-12 col-sm-12 col-md-6 col-lg-3"></div>
                     <div class="col-12 col-sm-12 col-md-12 col-lg-9">
-                        <div class="card">
+                        <div class="card" style="padding-bottom: 5px;">
                             <p class="admin-title">Панель управления</p>
-                            <% admin_teams.forEach(topic=> { %>
-                                <div class="topic">
-                                    <div class="d-inline-flex justify-content-start">
-                                        <div class="d-inline-flex avatar">
-                                            <% if (topic.type==1) { %>
-                                                <i class="fa-solid fa-users-medical"></i>
-                                                <% } else if (topic.type==2) { %>
-                                                    <i class="fa-solid fa-user-plus"></i>
-                                                    <% } %>
-                                        </div>
-                                        <div class="d-inline-flex flex-column title-subtitle"
-                                            onclick="window.location = '/teams/topic/<%= topic.identifier %>';">
-                                            <div class="title">
-                                                <%= topic.title %>
-                                            </div>
-                                            <div class="subtitle">
-                                                <%= topic.description %>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <% if (topic.ban) { %>
-                                        <div class="d-none d-sm-inline-flex info"
-                                            onclick="window.location = '/account/admin/teams/<%= topic.identifier %>/unban';">
-                                            <i class="fa-solid fa-ban" style="color: #f67468;"></i>
-                                        </div>
-                                        <% } else { %>
-                                            <div class="d-none d-sm-inline-flex info"
-                                                onclick="window.location = '/account/admin/teams/<%= topic.identifier %>/ban';">
-                                                <i class="fa-solid fa-ban"></i>
-                                            </div>
-                                            <% } %>
+                            <div class="d-inline-flex justify-content-end admin-panel">
+                                <div class="button" onclick="changeAdminPage(1);" style="margin-left: 12px;"><i
+                                        class="fa-solid fa-rectangle-history"></i></div>
+                                <div class="button" onclick="changeAdminPage(2);"><i class="fa-solid fa-users"></i>
                                 </div>
-                                <% }); %>
+                                <div class="button" onclick="changeAdminPage(3);"><i class="fa-solid fa-flag"></i></div>
+                            </div>
+                            <div id="admin_topics">
+                                <% admin_teams.forEach(topic=> { %>
+                                    <div class="topic">
+                                        <div class="d-inline-flex justify-content-start">
+                                            <div class="d-inline-flex avatar">
+                                                <% if (topic.type==1) { %>
+                                                    <i class="fa-solid fa-users-medical"></i>
+                                                    <% } else if (topic.type==2) { %>
+                                                        <i class="fa-solid fa-user-plus"></i>
+                                                        <% } %>
+                                            </div>
+                                            <div class="d-inline-flex flex-column title-subtitle"
+                                                onclick="window.location = '/teams/topic/<%= topic.identifier %>';">
+                                                <div class="title">
+                                                    <%= topic.title %>
+                                                </div>
+                                                <div class="subtitle">
+                                                    <%= topic.description %>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <% if (topic.ban) { %>
+                                            <div class="d-none d-sm-inline-flex info"
+                                                onclick="window.location = '/account/admin/teams/<%= topic.identifier %>/unban';">
+                                                <i class="fa-solid fa-ban" style="color: #f67468;"></i>
+                                            </div>
+                                            <% } else { %>
+                                                <div class="d-none d-sm-inline-flex info"
+                                                    onclick="window.location = '/account/admin/teams/<%= topic.identifier %>/ban';">
+                                                    <i class="fa-solid fa-ban"></i>
+                                                </div>
+                                                <% } %>
+                                    </div>
+                                    <% }); %>
+                            </div>
+                            <div id="admin_users" style="display: none;">
+
+                            </div>
+                            <div id="admin_reports" style="display: none;">
+                                <% admin_reports.forEach(function(report, index) { %>
+                                    <div class="topic" <% if (report.status) { %>style="filter: grayscale(1);"<% } %>>
+                                        <div class="d-inline-flex justify-content-start">
+                                            <div class="d-inline-flex avatar avatar-ban">
+                                                <% if (report.reason==1) { %>
+                                                    <i class="fa-solid fa-person-sign"></i>
+                                                    <% } else if (report.reason==2) { %>
+                                                        <i class="fa-solid fa-person-harassing"></i>
+                                                        <% } else if (report.reason==3) { %>
+                                                            <i class="fa-solid fa-person-dress-simple"></i>
+                                                            <% } else if (report.reason==4) { %>
+                                                                <i class="fa-solid fa-person-circle-xmark"></i>
+                                                                <% } else { %>
+                                                                    <i class="fa-solid fa-person-rifle"></i>
+                                                                    <% } %>
+                                            </div>
+
+                                            <div class="d-inline-flex flex-column title-subtitle">
+                                                <div class="title">
+                                                    <% if (report.reason==1) { %>
+                                                        Спам или ложная информация
+                                                        <% } else if (report.reason==2) { %>
+                                                            Оскорбления или проявления нетерпимости
+                                                            <% } else if (report.reason==3) { %>
+                                                                Контент сексуального характера
+                                                                <% } else if (report.reason==4) { %>
+                                                                    Нарушение авторских прав
+                                                                    <% } else { %>
+                                                                        Пропаганда терроризма
+                                                                        <% } %>
+                                                </div>
+                                                <div class="subtitle">
+                                                    <% if (report.details) { %>
+                                                        <%= report.details %>
+                                                            <% } else { %>
+                                                                —————————————————————————<br>
+                                                                Дополнительное описание отсутствует
+                                                                <% } %>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <% if (report.status) { %>
+                                            <div class="d-none d-sm-inline-flex info">
+                                                <i class="fa-solid fa-circle-check"></i>
+                                            </div>
+                                            <% } else { %>
+                                                <div class="d-none d-sm-inline-flex info">
+                                                    <i class="fa-solid fa-circle-exclamation"></i>
+                                                </div>
+                                                <% } %>
+                                                    <div class="d-none d-sm-inline-flex info"
+                                                        onclick="window.open('https://forum.mineshare.top/<%= report.topic %>/topic/<%= report.topic_id %>/', '_blank')">
+                                                        <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                                                    </div>
+                                    </div>
+                                    <% }); %>
+                            </div>
                         </div>
                     </div>
                     <% } %>
@@ -1058,12 +1160,36 @@
             }
         });
 
-        $('#username_input').on('keypress', function(e) {
-            if (e.which == 32){
+        $('#username_input').on('keypress', function (e) {
+            if (e.which == 32) {
                 return false;
             }
         });
     </script>
+
+    <% if (user.admin) { %>
+        <script>
+            function changeAdminPage(page) {
+                switch (page) {
+                    case 1:
+                        $('#admin_topics').css('display', 'block');
+                        $('#admin_users').css('display', 'none');
+                        $('#admin_reports').css('display', 'none');
+                        break;
+                    case 2:
+                        $('#admin_topics').css('display', 'none');
+                        $('#admin_users').css('display', 'block');
+                        $('#admin_reports').css('display', 'none');
+                        break;
+                    case 3:
+                        $('#admin_topics').css('display', 'none');
+                        $('#admin_users').css('display', 'none');
+                        $('#admin_reports').css('display', 'block');
+                        break;
+                }
+            }
+        </script>
+        <% } %>
 </body>
 
 </html>
