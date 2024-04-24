@@ -642,7 +642,7 @@
             display: none;
         }
 
-        .modal {
+        .skin-modal {
             display: none;
             position: fixed;
             z-index: 1;
@@ -655,7 +655,7 @@
             background-color: rgba(0, 0, 0, 0.4);
         }
 
-        .modal-content {
+        .skin-modal .modal-content {
             width: 300px;
             border-radius: 14px;
             margin: 15% auto;
@@ -664,7 +664,7 @@
             padding: 15px;
         }
 
-        .modal-box {
+        .skin-modal .modal-box {
             background-color: #fff;
             box-shadow: 0 0 5px rgba(0, 0, 0, 0.05);
             border-radius: 10px;
@@ -674,7 +674,7 @@
             padding-bottom: 31px;
         }
 
-        .modal-content .close {
+        .skin-modal .modal-content .close {
             color: #b7b7b7;
             font-size: 18px;
             margin-right: -21px;
@@ -682,18 +682,18 @@
             cursor: pointer;
         }
 
-        .modal-content .close:hover {
+        .skin-modal .modal-content .close:hover {
             color: #949494;
         }
 
-        .modal-content img {
+        .skin-modal .modal-content img {
             width: 160px;
             border-radius: 10px;
             font-family: 'TT Norms Pro', sans-serif;
             margin-bottom: 40px;
         }
 
-        .modal-content input {
+        .skin-modal .modal-content input {
             width: 100%;
             background: #fff;
             border-radius: 8px;
@@ -708,12 +708,12 @@
             margin-bottom: 15px;
         }
 
-        input:focus {
+        .skin-modal input:focus {
             border: 2px solid #11B2FF;
             outline: none;
         }
 
-        .modal-content button {
+        .skin-modal .modal-content button {
             width: 150px;
             background: #11B2FF;
             border: none;
@@ -727,7 +727,127 @@
             cursor: pointer;
         }
 
-        .modal-content button:hover {
+        .skin-modal .modal-content button:hover {
+            background: #0E99E6;
+        }
+
+        .report-modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0, 0, 0);
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .report-modal .modal-content {
+            width: 400px;
+            border-radius: 14px;
+            margin: 15% auto;
+            background-color: #F3F7FC;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+        }
+
+        .report-modal .modal-box {
+            background-color: #fff;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.05);
+            border-radius: 10px;
+            padding-top: 13px;
+            padding-left: 35px;
+            padding-right: 35px;
+            padding-bottom: 31px;
+        }
+
+        .report-modal .modal-content .close {
+            color: #b7b7b7;
+            font-size: 18px;
+            margin-right: -21px;
+            margin-bottom: 25px;
+            cursor: pointer;
+        }
+
+        .report-modal .modal-content .close:hover {
+            color: #949494;
+        }
+
+        .report-modal .modal-content .reason {
+            width: 100%;
+            background: #fff;
+            border-radius: 6px;
+            border: 2px solid #ebebeb;
+            color: rgb(146, 146, 146);
+            font-family: 'TT Norms Pro', sans-serif;
+            font-size: 15px;
+            padding-top: 10px;
+            padding-left: 12px;
+            padding-right: 12px;
+            padding-bottom: 11px;
+            margin-bottom: 15px;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .report-modal .modal-content .reason-icon {
+            position: absolute;
+            top: 22%;
+            right: 13px;
+            color: rgb(146, 146, 146);
+        }
+
+        .report-modal .modal-content .reason:focus {
+            border: 2px solid #11B2FF;
+            outline: none;
+        }
+
+        .report-modal .modal-content .reason option {
+            color: #3A4E57;
+            font-family: 'TT Norms Pro', sans-serif;
+        }
+
+        .report-modal .modal-content .details {
+            width: 100%;
+            background: #fff;
+            border-radius: 6px;
+            border: 2px solid #ebebeb;
+            color: #3A4E57;
+            font-family: 'TT Norms Pro', sans-serif;
+            font-size: 15px;
+            padding-top: 10px;
+            padding-left: 12px;
+            padding-right: 12px;
+            padding-bottom: 11px;
+            margin-bottom: 30px;
+        }
+
+        .report-modal .modal-content .details:focus {
+            border: 2px solid #11B2FF;
+            outline: none;
+        }
+
+        .report-modal .modal-content .details::placeholder {
+            color: rgb(146, 146, 146);
+        }
+
+        .report-modal .modal-content button {
+            width: 150px;
+            background: #11B2FF;
+            border: none;
+            border-radius: 6px;
+            color: #fff;
+            font-family: 'TT Norms Pro', sans-serif;
+            font-size: 15px;
+            font-weight: 500;
+            padding-top: 8.5px;
+            padding-bottom: 10px;
+            cursor: pointer;
+        }
+
+        .report-modal .modal-content button:hover {
             background: #0E99E6;
         }
 
@@ -750,7 +870,7 @@
 
     <div class="loading"></div>
 
-    <div id="skin_modal" class="modal">
+    <div id="skin_modal" class="skin-modal">
         <div class="modal-content">
             <div class="modal-box">
                 <form action="/account/skin" method="post">
@@ -765,6 +885,36 @@
 
                     <div class="d-flex justify-content-center">
                         <input id="skin_input" class="skin" name="skin" placeholder="UUID">
+                    </div>
+
+                    <div class="d-flex justify-content-center">
+                        <button>Подтвердить</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="report_modal" class="report-modal">
+        <div class="modal-content">
+            <div class="modal-box">
+                <form id="report_form" action="report" method="post">
+                    <div class="d-flex justify-content-end">
+                        <div class="d-inline-flex close" onclick="$('#report_modal').css('display', 'none');"><i
+                                class="fa-solid fa-xmark"></i></div>
+                    </div>
+
+                    <div class="d-flex justify-content-center" style="position: relative;">
+                        <i class="fa-solid fa-caret-down reason-icon"></i>
+                        <select id="reason" class="reason" name="verification" required>
+                            <option value="">Результат верификации</option>
+                            <option value="1">Да, было выявлено нарушение</option>
+                            <option value="2">Нет, нарушения отсутствуют</option>
+                        </select>
+                    </div>
+
+                    <div class="d-flex justify-content-center">
+                        <input class="details" name="verification_details" placeholder="Дополнительная информация">
                     </div>
 
                     <div class="d-flex justify-content-center">
@@ -1005,58 +1155,58 @@
                             <div id="admin_reports" style="display: none;">
                                 <% admin_reports.forEach(function(report, index) { %>
                                     <div class="topic" <% if (report.status) { %>style="filter: grayscale(1);"<% } %>>
-                                        <div class="d-inline-flex justify-content-start">
-                                            <div class="d-inline-flex avatar avatar-ban">
-                                                <% if (report.reason==1) { %>
-                                                    <i class="fa-solid fa-person-sign"></i>
-                                                    <% } else if (report.reason==2) { %>
-                                                        <i class="fa-solid fa-person-harassing"></i>
-                                                        <% } else if (report.reason==3) { %>
-                                                            <i class="fa-solid fa-person-dress-simple"></i>
-                                                            <% } else if (report.reason==4) { %>
-                                                                <i class="fa-solid fa-person-circle-xmark"></i>
-                                                                <% } else { %>
-                                                                    <i class="fa-solid fa-person-rifle"></i>
-                                                                    <% } %>
-                                            </div>
-
-                                            <div class="d-inline-flex flex-column title-subtitle">
-                                                <div class="title">
+                                            <div class="d-inline-flex justify-content-start">
+                                                <div class="d-inline-flex avatar avatar-ban">
                                                     <% if (report.reason==1) { %>
-                                                        Спам или ложная информация
+                                                        <i class="fa-solid fa-person-sign"></i>
                                                         <% } else if (report.reason==2) { %>
-                                                            Оскорбления или проявления нетерпимости
+                                                            <i class="fa-solid fa-person-harassing"></i>
                                                             <% } else if (report.reason==3) { %>
-                                                                Контент сексуального характера
+                                                                <i class="fa-solid fa-person-dress-simple"></i>
                                                                 <% } else if (report.reason==4) { %>
-                                                                    Нарушение авторских прав
+                                                                    <i class="fa-solid fa-person-circle-xmark"></i>
                                                                     <% } else { %>
-                                                                        Пропаганда терроризма
+                                                                        <i class="fa-solid fa-person-rifle"></i>
                                                                         <% } %>
                                                 </div>
-                                                <div class="subtitle">
-                                                    <% if (report.details) { %>
-                                                        <%= report.details %>
-                                                            <% } else { %>
-                                                                —————————————————————————<br>
-                                                                Дополнительное описание отсутствует
-                                                                <% } %>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <% if (report.status) { %>
-                                            <div class="d-none d-sm-inline-flex info">
-                                                <i class="fa-solid fa-circle-check"></i>
-                                            </div>
-                                            <% } else { %>
-                                                <div class="d-none d-sm-inline-flex info">
-                                                    <i class="fa-solid fa-circle-exclamation"></i>
-                                                </div>
-                                                <% } %>
-                                                    <div class="d-none d-sm-inline-flex info"
-                                                        onclick="window.open('https://forum.mineshare.top/<%= report.topic %>/topic/<%= report.topic_id %>/', '_blank')">
-                                                        <i class="fa-solid fa-arrow-up-right-from-square"></i>
+
+                                                <div class="d-inline-flex flex-column title-subtitle">
+                                                    <div class="title">
+                                                        <% if (report.reason==1) { %>
+                                                            Спам или ложная информация
+                                                            <% } else if (report.reason==2) { %>
+                                                                Оскорбления или проявления нетерпимости
+                                                                <% } else if (report.reason==3) { %>
+                                                                    Контент сексуального характера
+                                                                    <% } else if (report.reason==4) { %>
+                                                                        Нарушение авторских прав
+                                                                        <% } else { %>
+                                                                            Пропаганда терроризма
+                                                                            <% } %>
                                                     </div>
+                                                    <div class="subtitle">
+                                                        <% if (report.details) { %>
+                                                            <%= report.details %>
+                                                                <% } else { %>
+                                                                    —————————————————————————<br>
+                                                                    Дополнительное описание отсутствует
+                                                                    <% } %>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <% if (report.status) { %>
+                                                <div class="d-none d-sm-inline-flex info">
+                                                    <i class="fa-solid fa-circle-check"></i>
+                                                </div>
+                                                <% } else { %>
+                                                    <div class="d-none d-sm-inline-flex info" onclick="openReportModal('<%= report.id %>');">
+                                                        <i class="fa-solid fa-circle-exclamation"></i>
+                                                    </div>
+                                                    <% } %>
+                                                        <div class="d-none d-sm-inline-flex info"
+                                                            onclick="window.open('https://forum.mineshare.top/<%= report.topic %>/topic/<%= report.topic_id %>/', '_blank')">
+                                                            <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                                                        </div>
                                     </div>
                                     <% }); %>
                             </div>
@@ -1142,6 +1292,19 @@
         function openSkinModal() {
             $('#skin_modal').css('display', 'block');
         }
+
+        function openReportModal(id) {
+            $('#report_form').attr('action', `admin/${id}/report`);
+            $('#report_modal').css('display', 'block');
+        }
+
+        $('#reason').on('change', function () {
+            if ($('#reason').find(":selected").val() != '') {
+                $('#reason').css('color', '#3A4E57');
+            } else {
+                $('#reason').css('color', 'rgb(146, 146, 146)');
+            }
+        });
 
         $('#skin_input').on("change", function () {
             updateSkin();

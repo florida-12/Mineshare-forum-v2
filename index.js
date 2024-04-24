@@ -409,6 +409,27 @@ app.get('/account/admin/:topic/:id/unban', isAuthenticated, (req, res) => {
     });
 });
 
+app.post('/account/admin/:id/report', isAuthenticated, (req, res) => {
+    if (!req.user.admin) return res.redirect('/account');
+
+    let { verification, verification_details } = req.body;
+    if (verification == '1') {
+        verification = true;
+    } else {
+        verification = false;
+    }
+    const id = req.params.id;
+
+    pool.query(`UPDATE forum_reports SET verification = $1, verification_details = $2, status = true WHERE id = $3;`, [verification, verification_details, id], (err, result) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).send('Internal Server Error');
+        }
+
+        res.redirect('/account');
+    });
+});
+
 app.get('/account/confirm/:token', async (req, res) => {
     const token = req.params.token;
     try {
