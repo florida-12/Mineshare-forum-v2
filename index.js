@@ -165,7 +165,7 @@ passport.use(new GoogleStrategy({
             if (userResult.rows.length > 0) {
                 return done(null, userResult.rows[0]);
             } else {
-                const password = await generatePassword();   //random password
+                const password = await generatePassword();
 
                 const newUserResult = await pool.query('INSERT INTO users (email, password, confirmation, regip) VALUES ($1, $2, $3, $4) RETURNING *', [profile.emails[0].value, password, true, 'GOOGLE']);
 
