@@ -657,11 +657,23 @@
 
         .skin-modal .modal-content {
             width: 300px;
+            position: relative;
             border-radius: 14px;
             margin: 15% auto;
             background-color: #F3F7FC;
             box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
             padding: 15px;
+            z-index: 2;
+        }
+
+        .skin-modal .background {
+            width: 100%;
+            height: 100vh;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: transparent;
+            z-index: 1;
         }
 
         .skin-modal .modal-box {
@@ -746,11 +758,23 @@
 
         .report-modal .modal-content {
             width: 400px;
+            position: relative;
             border-radius: 14px;
             margin: 15% auto;
             background-color: #F3F7FC;
             box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
             padding: 15px;
+            z-index: 2;
+        }
+
+        .report-modal .background {
+            width: 100%;
+            height: 100vh;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: transparent;
+            z-index: 1;
         }
 
         .report-modal .modal-box {
@@ -871,6 +895,7 @@
     <div class="loading"></div>
 
     <div id="skin_modal" class="skin-modal">
+        <div class="background" onclick="$('#skin_modal').css('display', 'none');"></div>
         <div class="modal-content">
             <div class="modal-box">
                 <form action="/account/skin" method="post">
@@ -896,6 +921,7 @@
     </div>
 
     <div id="report_modal" class="report-modal">
+        <div class="background" onclick="$('#report_modal').css('display', 'none');"></div>
         <div class="modal-content">
             <div class="modal-box">
                 <form id="report_form" action="report" method="post">
@@ -1199,7 +1225,8 @@
                                                     <i class="fa-solid fa-circle-check"></i>
                                                 </div>
                                                 <% } else { %>
-                                                    <div class="d-none d-sm-inline-flex info" onclick="openReportModal('<%= report.id %>');">
+                                                    <div class="d-none d-sm-inline-flex info"
+                                                        onclick="openReportModal('<%= report.id %>');">
                                                         <i class="fa-solid fa-circle-exclamation"></i>
                                                     </div>
                                                     <% } %>
