@@ -35,6 +35,7 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
 const recaptcha = new Recaptcha(process.env.RECAPTCHA_SITE_KEY, process.env.RECAPTCHA_SECRET_KEY);
+const bannedDomains = ['1secmail.com', '1secmail.org', '1secmail.net', 'vjuum.com', 'laafd.com', 'txcct.com', 'rteet.com', 'dpptd.com'];
 
 const pool = new pg.Pool({
     user: process.env.DATABASE_USER,
@@ -205,10 +206,15 @@ app.get('/register', recaptcha.middleware.render, (req, res) => {
 
 app.post('/register', recaptcha.middleware.verify, async (req, res) => {
     if (req.recaptcha.error) {
-        //return res.send('Проверка reCaptcha не удалась');
+        return res.send('Проверка reCaptcha не удалась');
     }
 
     const { email, password, password_repeat } = req.body;
+
+    const emailDomain = email.split('@')[1];
+    if (bannedDomains.includes(emailDomain)) {
+        return res.status(400).json({ message: 'Registration using this email domain is not allowed.' });
+    }
 
     if (password != password_repeat) return res.status(400).json({ message: 'Password mismatch.' });
 
@@ -885,7 +891,6 @@ app.get('/sitemap.xml', async function (req, res) {
 })
 
 async function sendConfirmationEmail(email, confirmationLink) {
-    console.log('отправлено')
     const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
