@@ -7,9 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link rel="icon" type="image/png" href="/img/favicon.png">
-    <title>Авторизация | Craftomania</title>
+    <title>Регистрация | Craftomania</title>
 
-    <meta property="og:title" content="Авторизация | Craftomania" />
+    <meta property="og:title" content="Регистрация | Craftomania" />
     <meta property="og:image" content="https://craftomania.net/img/favicon-alt.png">
 
     <link href="https://fonts.cdnfonts.com/css/tt-norms-pro" rel="stylesheet">
@@ -51,6 +51,9 @@
         }
 
         .card {
+            width: fit-content;
+            height: fit-content;
+            position: relative;
             background: #fff;
             box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.15);
             border-radius: 10px;
@@ -58,11 +61,11 @@
             padding-left: 40px;
             padding-right: 40px;
             padding-bottom: 30px;
-            margin-top: 50px;
-            margin-bottom: 100px;
+            margin-top: 15px;
+            margin-bottom: 15px;
         }
 
-        .craftomania-id {                                        
+        .craftomania-id {
             margin-bottom: 50px;
         }
 
@@ -140,10 +143,30 @@
             padding-left: 15px;
             padding-right: 15px;
             padding-bottom: 15px;
-            margin-bottom: 50px;
+            margin-bottom: 20px;
         }
 
         #password:focus {
+            border: 2px solid #11B2FF;
+            outline: none;
+        }
+
+        #password_repeat {
+            width: 280px;
+            background: #fff;
+            border-radius: 8px;
+            border: 2px solid #ebebeb;
+            color: #3A4E57;
+            font-family: 'TT Norms Pro', sans-serif;
+            font-size: 15px;
+            padding-top: 13.5px;
+            padding-left: 15px;
+            padding-right: 15px;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        #password_repeat:focus {
             border: 2px solid #11B2FF;
             outline: none;
         }
@@ -218,55 +241,46 @@
             font-size: 10px;
             margin-right: 4px;
         }
-
-        .reg {
-            color: rgb(198, 198, 198);
-            font-family: 'TT Norms Pro', sans-serif;
-            font-size: 15px;
-            margin-top: 40px;
-            display: inline-flex;
-            cursor: pointer;
-        }
-
-        .reg:hover {
-            text-decoration: underline;
-        }
     </style>
 
-    <div class="container" style="display: flex;align-items: center; justify-content: center;">
-
-        <div class="d-flex justify-content-center">
-            <div class="card">
-                <form action="" method="post">
-                    <div class="d-inline-flex flex-column">
-                        <div class="d-flex justify-content-start">
-                            <div class="craftomania-id">
-                                <div class="d-inline-flex title">Crafto</div>
-                                <div class="d-inline-flex id">ID</div>
-                                <div class="d-inline-flex separator"></div>
-                                <div class="d-inline-flex description">Единый аккаунт<br>для одной экосистемы</div>
+    <div class="container" style="height: 100vh;">
+        <div class="row" style="height: 100vh;">
+            <div class="col d-flex justify-content-center align-items-center">
+                <div class="card">
+                    <form action="" method="post">
+                        <div class="d-inline-flex flex-column">
+                            <div class="d-flex justify-content-start">
+                                <div class="craftomania-id">
+                                    <div class="d-inline-flex title">Crafto</div>
+                                    <div class="d-inline-flex id">ID</div>
+                                    <div class="d-inline-flex separator"></div>
+                                    <div class="d-inline-flex description">Единый аккаунт<br>для одной экосистемы</div>
+                                </div>
                             </div>
-                        </div>
-
-                        <input id="email" class="d-inline-flex" name="email" placeholder="Email" type="email" required>
-                        <input id="password" class="d-inline-flex" name="password" placeholder="Пароль" type="password"
-                            required>
-                        <div class="d-flex justify-content-center">
-                            <button id="submit" type="submit">Войти</button>
-                        </div>
-                        <div class="d-flex justify-content-center">
-                            <div class="line"></div>
-                        </div>
-                        <div class="d-flex justify-content-center">
-                            <button id="submit_google" onclick="window.location = '/auth/google';"><img src="/img/google.svg">Войти с Google</button>
-                        </div>
-                        <div class="d-flex justify-content-between">
+    
+                            <input id="email" class="d-inline-flex" name="email" placeholder="Email" type="email" required>
+                            <input id="password" class="d-inline-flex" name="password" placeholder="Пароль" type="password"
+                                required>
+                            <input id="password_repeat" class="d-inline-flex" name="password_repeat"
+                                placeholder="Повтор пароля" type="password" required>
+                            <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 50px;">
+                                <%- captcha %>
+                            </div>
+                            <div class="d-flex justify-content-center">
+                                <button id="submit" type="submit">Регистрация</button>
+                            </div>
+                            <div class="d-flex justify-content-center">
+                                <div class="line"></div>
+                            </div>
+                            <div class="d-flex justify-content-center">
+                                <button id="submit_google" onclick="window.location = '/auth/google';"><img
+                                        src="/img/google.svg">Войти с Google</button>
+                            </div>
                             <div class="back" onclick="history.back()"><i
                                     class="fa-solid fa-arrow-left-from-line"></i>вернуться</div>
-                            <div class="reg" onclick="window.location = '/register';">регистрация</div>
                         </div>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
         </div>
 

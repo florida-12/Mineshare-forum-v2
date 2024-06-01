@@ -195,9 +195,17 @@ passport.deserializeUser(async (id, done) => {
     }
 });
 
+app.get('/login', (req, res) => {
+    res.render('login');
+});
+
+app.get('/register', recaptcha.middleware.render, (req, res) => {
+    res.render('register', { captcha: res.recaptcha });
+});
+
 app.post('/register', recaptcha.middleware.verify, async (req, res) => {
     if (req.recaptcha.error) {
-        return res.send('Проверка reCaptcha не удалась');
+        //return res.send('Проверка reCaptcha не удалась');
     }
 
     const { email, password, password_repeat } = req.body;
@@ -219,7 +227,7 @@ app.post('/register', recaptcha.middleware.verify, async (req, res) => {
 
             const newUserResult = await pool.query('INSERT INTO users (email, password, regip, confirmation_token) VALUES ($1, $2, $3, $4) RETURNING *', [email, hashedPassword, regip, confirmationToken]);
 
-            const confirmationLink = `https://mineshare.top/account/confirm/${confirmationToken}`;
+            const confirmationLink = `https://forum.craftomania.net/account/confirm/${confirmationToken}`;
             sendConfirmationEmail(email, confirmationLink);
 
             res.redirect('/?login=confirmation')
@@ -437,7 +445,7 @@ app.get('/account/confirm/:token', async (req, res) => {
 
         if (userResult.rows.length > 0) {
             await pool.query('UPDATE users SET confirmation = true, confirmation_token = null WHERE id = $1', [userResult.rows[0].id]);
-            res.redirect('/?login=confirmed');
+            res.redirect('/');
         } else {
             res.status(400).json({ message: 'Неверный токен или пользователь не найден.' });
         }
@@ -493,10 +501,6 @@ app.get('/', (req, res) => {
 
         res.render('home', { user: req.user, moderators: result.rows, teams: teams.rows.length, creation: creation.rows.length, footer: footer_html });
     });
-});
-
-app.get('/login', (req, res) => {
-    res.render('login');
 });
 
 app.get('/teams', (req, res) => {
@@ -881,16 +885,17 @@ app.get('/sitemap.xml', async function (req, res) {
 })
 
 async function sendConfirmationEmail(email, confirmationLink) {
+    console.log('отправлено')
     const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
-            user: 'mineshare.project@gmail.com',
+            user: 'craftomania.production@gmail.com',
             pass: process.env.EMAIL_SECRET
         }
     });
 
     const mailOptions = {
-        from: 'mineshare.project@gmail.com',
+        from: 'craftomania.production@gmail.com',
         to: email,
         subject: 'Подтверждение регистрации',
         text: `Для подтверждения регистрации перейдите по ссылке: ${confirmationLink}`,
