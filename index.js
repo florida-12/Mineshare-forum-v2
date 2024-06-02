@@ -236,7 +236,7 @@ app.post('/register', recaptcha.middleware.verify, async (req, res) => {
             const confirmationLink = `https://forum.craftomania.net/account/confirm/${confirmationToken}`;
             sendConfirmationEmail(email, confirmationLink);
 
-            res.redirect('/?login=confirmation')
+            res.redirect('/account/email-verification')
         }
     } catch (error) {
         console.log(error);
@@ -442,6 +442,13 @@ app.post('/account/admin/:id/report', isAuthenticated, (req, res) => {
 
         res.redirect('/account');
     });
+});
+
+app.get('/account/email-verification', async (req, res) => {
+    if (!req.path.endsWith('/') && req.path !== '/') return res.redirect(301, req.path + '/');
+    if (req.user) return res.redirect('/account');
+
+    res.render('email-verification', { footer: footer_html });
 });
 
 app.get('/account/confirm/:token', async (req, res) => {
