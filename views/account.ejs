@@ -1127,7 +1127,7 @@
                                     <% }); %>
                     </div>
                 </div>
-                <% if (user.admin) { %>
+                <% if (user.admin || user.moder) { %>
                     <div class="col-12 col-sm-12 col-md-6 col-lg-3"></div>
                     <div class="col-12 col-sm-12 col-md-12 col-lg-9">
                         <div class="card" style="padding-bottom: 5px;">
@@ -1357,7 +1357,7 @@
         });
     </script>
 
-    <% if (user.admin) { %>
+    <% if (user.admin || user.moder) { %>
         <script>
             function changeAdminPage(page) {
                 switch (page) {

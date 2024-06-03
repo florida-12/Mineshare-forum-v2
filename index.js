@@ -424,7 +424,7 @@ app.get('/account/admin/:topic/:id/unban', isAuthenticated, (req, res) => {
 });
 
 app.post('/account/admin/:id/report', isAuthenticated, (req, res) => {
-    if (!req.user.admin) return res.redirect('/account');
+    if (!req.user.admin || !req.user.moder) return res.redirect('/account');
 
     let { verification, verification_details } = req.body;
     if (verification == '1') {
