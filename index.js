@@ -885,11 +885,8 @@ app.get('/sitemap.xml', async function (req, res) {
             smStream.write({ url: `/creation/topic/${row.identifier}`, lastmod: currentDate, changefreq: 'weekly', priority: 0.8 });
         });
 
-        // cache the response
         streamToPromise(pipeline).then(sm => sitemap = sm);
-        // make sure to attach a write stream such as streamToPromise before ending
         smStream.end();
-        // stream write the response
         pipeline.pipe(res).on('error', (e) => { throw e });
     } catch (e) {
         console.error(e);
