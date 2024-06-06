@@ -244,7 +244,6 @@ app.post('/register', recaptcha.middleware.verify, async (req, res) => {
     }
 });
 
-// Роуты для аутентификации
 app.post('/login', passport.authenticate('local', {
     successRedirect: '/',
     failureRedirect: '/',
