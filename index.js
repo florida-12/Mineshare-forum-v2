@@ -274,11 +274,12 @@ app.get('/account', isAuthenticated, async (req, res) => {
     const creation = await pool.query(`SELECT * FROM forum_creation WHERE owner = $1 ORDER BY update DESC;`, [req.user.id]);
 
     const admin_teams = await pool.query('SELECT * FROM forum_teams ORDER BY update DESC;');
+    const admin_users = await pool.query('SELECT * FROM users ORDER BY id DESC LIMIT 30;');
     const admin_reports = await pool.query('SELECT * FROM forum_reports ORDER BY date DESC;');
 
     updateOnlineStatus(req.user.email);
 
-    res.render('account', { user: req.user, teams: teams.rows, creation: creation.rows, admin_teams: admin_teams.rows, admin_reports: admin_reports.rows });
+    res.render('account', { user: req.user, teams: teams.rows, creation: creation.rows, admin_teams: admin_teams.rows, admin_users: admin_users.rows, admin_reports: admin_reports.rows });
 });
 
 app.post('/account/username', isAuthenticated, (req, res) => {
