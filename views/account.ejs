@@ -1206,7 +1206,13 @@
                                                 <div class="d-inline-flex" style="vertical-align: top;">
                                                     <div
                                                         style="height: 34px; position: relative; box-sizing: border-box; background-color: #fff; border-left: 1.5px solid #ededed; border-top: 1.5px solid #ededed; border-bottom: 1.5px solid #ededed; border-radius: 4px 0 0 4px; color: #b6b6b6; font-family: 'Roboto', sans-serif; font-size: 14px; padding-left: 8px; padding-right: 8px;">
-                                                        <div style="margin-top: 7px;"><%= user.regip %></div>
+                                                        <div style="margin-top: 7px;">
+                                                            <% if (user.admin || user.moder) { %>
+                                                                UNBEKNOWN
+                                                                    <% } else { %>
+                                                                        <%= user.logip %>
+                                                                            <% } %>
+                                                        </div>
                                                     </div>
                                                     <div
                                                         style="width: 34px; height: 34px; position: relative; box-sizing: border-box; background-color: #fff; border: 1.5px solid #ededed; border-radius: 0 4px 4px 0; cursor: pointer;">

@@ -5,6 +5,7 @@ const path = require('path');
 const pg = require('pg');
 const fs = require('fs/promises');
 const passport = require('passport');
+const requestIp = require('request-ip');
 const LocalStrategy = require('passport-local').Strategy;
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const Recaptcha = require('express-recaptcha').RecaptchaV2;
@@ -27,6 +28,7 @@ const app = express();
 dotenv.config();
 
 
+app.use(requestIp.mw());
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'assets')));
@@ -119,8 +121,8 @@ async function generatePassword() {
     return hashedPassword;
 }
 
-async function updateOnlineStatus(email) {
-    const logdate = await pool.query('UPDATE users SET logdate = CURRENT_TIMESTAMP WHERE email = $1', [email]);
+async function updateOnlineStatus(ip, email) {
+    const log = await pool.query('UPDATE users SET logip = $1, logdate = CURRENT_TIMESTAMP WHERE email = $2', [ip, email]);
 }
 
 passport.use(new LocalStrategy({
@@ -226,12 +228,12 @@ app.post('/register', recaptcha.middleware.verify, async (req, res) => {
         } else {
             const hashedPassword = await bcrypt.hash(password, 10);
 
-            let regip = req.headers['x-forwarded-for'];
+            let regip = req.clientIp;
             if (regip == undefined) regip = '0.0.0.0';
 
             const confirmationToken = uuidv4();
 
-            const newUserResult = await pool.query('INSERT INTO users (email, password, regip, confirmation_token) VALUES ($1, $2, $3, $4) RETURNING *', [email, hashedPassword, regip, confirmationToken]);
+            const newUserResult = await pool.query('INSERT INTO users (email, password, logip, regip, confirmation_token) VALUES ($1, $2, $3, $4, $5) RETURNING *', [email, hashedPassword, regip, regip, confirmationToken]);
 
             const confirmationLink = `https://forum.craftomania.net/account/confirm/${confirmationToken}`;
             sendConfirmationEmail(email, confirmationLink);
@@ -273,13 +275,27 @@ app.get('/account', isAuthenticated, async (req, res) => {
     const teams = await pool.query(`SELECT * FROM forum_teams WHERE owner = $1 ORDER BY update DESC;`, [req.user.id]);
     const creation = await pool.query(`SELECT * FROM forum_creation WHERE owner = $1 ORDER BY update DESC;`, [req.user.id]);
 
-    const admin_teams = await pool.query('SELECT * FROM forum_teams ORDER BY update DESC;');
-    const admin_users = await pool.query('SELECT * FROM users ORDER BY id DESC LIMIT 30;');
-    const admin_reports = await pool.query('SELECT * FROM forum_reports ORDER BY date DESC;');
+    let admin_teams;
+    let admin_users;
+    let admin_reports;
 
-    updateOnlineStatus(req.user.email);
+    if (req.user.admin || req.user.moder) {
+        admin_teams = await pool.query('SELECT * FROM forum_teams ORDER BY update DESC;');
+        admin_users = await pool.query('SELECT * FROM users ORDER BY id DESC LIMIT 50;');
+        admin_reports = await pool.query('SELECT * FROM forum_reports ORDER BY date DESC;');
+    }
 
-    res.render('account', { user: req.user, teams: teams.rows, creation: creation.rows, admin_teams: admin_teams.rows, admin_users: admin_users.rows, admin_reports: admin_reports.rows });
+    updateOnlineStatus(req.clientIp, req.user.email);
+
+    res.render('account', 
+    {
+        user: req.user, 
+        teams: teams.rows,
+        creation: creation.rows,
+        admin_teams: (req.user.admin || req.user.moder) ? admin_teams.rows : null,
+        admin_users: (req.user.admin || req.user.moder) ? admin_users.rows : null,
+        admin_reports: (req.user.admin || req.user.moder) ? admin_reports.rows : null
+    });
 });
 
 app.post('/account/username', isAuthenticated, (req, res) => {
@@ -510,7 +526,7 @@ app.get('/', (req, res) => {
         const teams = await pool.query('SELECT id FROM forum_teams WHERE ban = false;');
         const creation = await pool.query('SELECT id FROM forum_creation WHERE status = false AND ban = false;');
 
-        if (req.user) updateOnlineStatus(req.user.email);
+        if (req.user) updateOnlineStatus(req.clientIp, req.user.email);
 
         res.render('home', { user: req.user, moderators: result.rows, teams: teams.rows.length, creation: creation.rows.length, footer: footer_html });
     });
@@ -567,7 +583,7 @@ app.get('/teams', (req, res) => {
             }
         });
 
-        if (req.user) updateOnlineStatus(req.user.email);
+        if (req.user) updateOnlineStatus(req.clientIp, req.user.email);
 
         res.render('teams', { user: req.user, topics: result.rows, footer: footer_html });
     });
@@ -599,7 +615,7 @@ app.get('/teams/topic/:id', (req, res) => {
 
 app.post('/teams/topic/:id/report', isAuthenticated, (req, res) => {
     const { reason, details } = req.body;
-    
+
     if (reason < 1 || reason > 5) return res.redirect(`/teams/topic/${req.params.id}/`);
 
     pool.query(`INSERT INTO forum_reports (topic, topic_id, user_id, reason, details) VALUES ('teams', $1, $2, $3, $4);`, [req.params.id, req.user.id, reason, details], async (err, result) => {
@@ -687,7 +703,7 @@ app.get('/manuals', (req, res) => {
             }
         });
 
-        if (req.user) updateOnlineStatus(req.user.email);
+        if (req.user) updateOnlineStatus(req.clientIp, req.user.email);
 
         res.render('manuals', { user: req.user, topics: result.rows, footer: footer_html });
     });
@@ -748,7 +764,7 @@ app.get('/creation', (req, res) => {
             }
         });
 
-        if (req.user) updateOnlineStatus(req.user.email);
+        if (req.user) updateOnlineStatus(req.clientIp, req.user.email);
 
         res.render('creation', { user: req.user, topics: result.rows, footer: footer_html });
     });
@@ -784,7 +800,7 @@ app.get('/creation/topic/:id', (req, res) => {
 
 app.post('/creation/topic/:id/report', isAuthenticated, (req, res) => {
     const { reason, details } = req.body;
-    
+
     if (reason < 1 || reason > 5) return res.redirect(`/teams/topic/${req.params.id}/`);
 
     pool.query(`INSERT INTO forum_reports (topic, topic_id, user_id, reason, details) VALUES ('creation', $1, $2, $3, $4);`, [req.params.id, req.user.id, reason, details], async (err, result) => {
